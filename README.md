@@ -1,8 +1,10 @@
-# Kartlar — kişisel aralıklı tekrar uygulaması
+# restudy — kişisel aralıklı tekrar uygulaması
 
 Notlarını / çıkmış soruları yerelde Gemini ile Q&A kartlarına çevirir,
 Firestore'da saklar ve GitHub Pages'te barınan statik bir web arayüzünden
-çalışırsın. Hiçbir yerde sunucu yok.
+çalışırsın. **Yazıp deploy ettiğin bir sunucu kodu yok** — arka uç Firebase'in
+yönettiği servisler (Firestore veritabanı + Auth); web arayüzü salt statik
+dosyalar, tüm mantık tarayıcıda döner.
 
 - `generate_cards.py` — notlardan Gemini ile kart **üretir**
 - `import_kpss.py` — hazır soru-cevap içeriğinden (ÖSYM PDF / URL / dosya)

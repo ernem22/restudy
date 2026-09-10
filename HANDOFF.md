@@ -1,8 +1,9 @@
-# Flashcards App — Handoff Spec
+# restudy — Handoff Spec
 
 Personal, single-user spaced-repetition flashcard app. Notes are turned into
 Q&A cards locally by Gemini, stored in Firestore, studied through a static
-web UI hosted on GitHub Pages. No backend server anywhere in this system.
+web UI hosted on GitHub Pages. No **self-hosted** backend: the backend is
+Firebase's managed Firestore + Auth; nothing else runs server code.
 
 Every card belongs to exactly one **type** (`yazilim` or `kpss`) and one
 free-text **topic** (konu), e.g. `React`, `Anayasa Hukuku`. The web app is a
@@ -24,11 +25,13 @@ cards.** `generate_cards.py` requires `--type` and `--topic` on every run.
 └─────────────────┘      └──────────────────────┘      └───────────────┘
 ```
 
-- **Nothing runs on a server.** `generate_cards.py` runs on your own machine,
-  once, whenever you want to add cards. The web app is 3 static files; all
-  its logic (auth, reading cards, computing SM-2, writing results back) runs
-  in the visitor's browser via the Firebase JS SDK talking directly to
-  Firestore. GitHub Pages only serves the 3 files — it has no code execution.
+- **No server code you write or deploy.** `generate_cards.py` /
+  `import_kpss.py` run on your own machine, whenever you want to add cards.
+  The web app is static files; all its logic (auth, reading cards, computing
+  SM-2, writing results back) runs in the visitor's browser via the Firebase
+  JS SDK talking directly to Firestore. GitHub Pages only serves the files —
+  no code execution there. The actual backend (data store, auth) is Firebase,
+  a managed service.
 - **Two different credential types, do not confuse them:**
   - `serviceAccountKey.json` (admin, used only by the local Python script) —
     full read/write to Firestore, bypasses all security rules. Never goes in
