@@ -1,0 +1,17 @@
+# secrets / credentials — asla commit'lenmez
+.env
+serviceAccountKey.json
+
+# indirilen sınav materyalleri — telifli, repoya girmesin
+notes/
+*.pdf
+
+# python
+__pycache__/
+*.pyc
+
+# editör / işletim sistemi
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

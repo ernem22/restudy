@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1B2430" />
+  <title>Kartlar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+
+  <!-- Sign-in screen -->
+  <section id="signin-screen" class="screen">
+    <form id="signin-form" class="signin-box">
+      <h1>Kartlar</h1>
+      <p class="signin-sub">Çalışmaya devam etmek için giriş yap.</p>
+      <input type="email" id="email" placeholder="e-posta" autocomplete="username" required />
+      <input type="password" id="password" placeholder="şifre" autocomplete="current-password" required />
+      <button type="submit">Giriş yap</button>
+      <p id="signin-error" class="error"></p>
+    </form>
+  </section>
+
+  <!-- Step 1: pick type -->
+  <section id="type-screen" class="screen hidden">
+    <div class="picker">
+      <p class="picker-step">1 / 3</p>
+      <h2 class="picker-title">Tür seç</h2>
+      <div id="type-list" class="type-list">
+        <button data-type="yazilim" class="type-card">
+          <span class="type-name">Yazılım</span>
+          <span class="type-meta" data-count>—</span>
+        </button>
+        <button data-type="kpss" class="type-card">
+          <span class="type-name">KPSS</span>
+          <span class="type-meta" data-count>—</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 2: pick topic -->
+  <section id="topic-screen" class="screen hidden">
+    <div class="picker">
+      <button id="topic-back" class="link-back" type="button">← Tür</button>
+      <p class="picker-step">2 / 3</p>
+      <h2 class="picker-title">Konu seç</h2>
+      <p id="topic-type-label" class="picker-sub">—</p>
+      <div id="topic-list" class="topic-list"></div>
+      <p id="topic-empty" class="picker-note hidden">Bu türde hiç kart yok.</p>
+    </div>
+  </section>
+
+  <!-- Step 3: study -->
+  <section id="study-screen" class="screen hidden">
+    <div id="progress"><div id="progress-bar"></div></div>
+
+    <header class="topbar">
+      <button id="study-back" class="link-back" type="button">← Konu</button>
+      <span id="deck-name">—</span>
+      <span id="due-count">0 kart</span>
+    </header>
+
+    <main class="stage">
+      <div class="deck">
+        <div id="card" class="card">
+          <div class="card-face card-front">
+            <p id="front-text"></p>
+          </div>
+          <div class="card-face card-back hidden">
+            <p id="back-text"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="controls">
+      <button id="reveal-btn" class="reveal">Cevabı göster</button>
+      <div id="grade-buttons" class="grades hidden">
+        <button data-grade="0" class="grade grade-again"><span class="grade-label">Tekrar</span><span class="grade-int">&lt;10dk</span></button>
+        <button data-grade="3" class="grade grade-hard"><span class="grade-label">Zor</span><span class="grade-int">1g</span></button>
+        <button data-grade="4" class="grade grade-good"><span class="grade-label">İyi</span><span class="grade-int" id="good-interval">—</span></button>
+        <button data-grade="5" class="grade grade-easy"><span class="grade-label">Kolay</span><span class="grade-int" id="easy-interval">—</span></button>
+      </div>
+      <p class="hint" id="kbd-hint">Boşluk: cevabı göster · 1–4: notla</p>
+    </footer>
+  </section>
+
+  <!-- Empty state -->
+  <section id="empty-screen" class="screen hidden">
+    <div class="empty-box">
+      <p class="empty-mark">✓</p>
+      <p class="empty-title">Bu konuda hazır kart yok.</p>
+      <p class="empty-sub">Sırada bekleyen kart kalmadı.</p>
+      <button id="empty-back" class="reveal" type="button">Başka konu seç</button>
+    </div>
+  </section>
+
+  <script type="module" src="app.js?v=2"></script>
+</body>
+</html>
