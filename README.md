@@ -104,11 +104,11 @@ tutarlı yaz.
 
 ---
 
-## Sıfırdan Firebase kurulumu
+## Firebase kurulumu (referans)
 
-Bu repo zaten çalışan bir `web/firebase-config.js` ve yayımlanmış
-`firestore.rules` ile geliyor. Aşağıdakiler **yeni bir Firebase projesi**
-bağlamak istersen gereklidir.
+Firebase tarafı zaten kurulu ve `web/firebase-config.js` + yayımlanmış
+`firestore.rules` repoda. Bu bölüm o kurulumun ne olduğunu belgeler —
+sıfırdan tekrar kurman gerekirse diye.
 
 ### 1. Firebase projesi
 
@@ -157,19 +157,18 @@ Yaz → oku → sil zincirini test eder. Hepsi `[OK]` ise kurulum tamam.
 
 ## Yayınlama (GitHub Pages)
 
-GitHub Pages "Deploy from a branch" yalnızca **kök** veya **`/docs`**
-klasörünü sunabilir — `/web` seçeneği yoktur. İki yoldan biri:
+`web/` klasörünü Pages'e yükleyen bir GitHub Actions workflow'u var
+(`.github/workflows/pages.yml`). Yapman gerekenler:
 
-**A) `web/` → `docs/` olarak yeniden adlandır** (en kolay):
+1. Repo → **Settings** → **Pages** → **Source: GitHub Actions** seç.
+2. `main`'e her push'ta (`web/**` değiştiyse) workflow çalışır; **Actions**
+   sekmesinden takip et. Elle tetiklemek için: Actions → "Deploy web/ to
+   GitHub Pages" → **Run workflow**.
+3. Firebase konsolu → **Authentication** → **Settings** → **Authorized
+   domains** → `<kullanıcı>.github.io` ekle. **Bu olmadan yayındaki sitede
+   giriş çalışmaz** (localhost varsayılan olarak ekli).
 
-1. `web` klasörünü `docs` yap, push et.
-2. Repo → **Settings** → **Pages** → **Source: Deploy from a branch** →
-   Branch: `main`, klasör: `/docs` → **Save**.
-
-**B) GitHub Actions** ile `web/` klasörünü yükleyen bir Pages workflow'u.
-
-Ayrıca Firebase konsolu → **Authentication** → **Settings** →
-**Authorized domains**'e `<kullanıcı>.github.io` ekle.
+Yayın URL'si: `https://<kullanıcı>.github.io/restudy/`
 
 ---
 

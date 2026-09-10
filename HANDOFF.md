@@ -50,6 +50,7 @@ flashcards-app/
 ├── .env.example            ✅ done — copy to .env, holds GEMINI_API_KEY
 ├── requirements.txt        ✅ done
 ├── .gitignore               ✅ done (excludes .env, serviceAccountKey.json, notes/, *.pdf)
+├── .github/workflows/pages.yml ✅ done — deploys web/ to GitHub Pages
 ├── firestore.rules          ✅ done — real UID pasted in & published (see §4)
 ├── README.md                ✅ done — step-by-step setup instructions
 └── web/
@@ -281,19 +282,18 @@ The picker screens (type/topic) reuse the same tokens.
 
 ## 8. README.md — done
 
-Walks through, in order: Firebase project creation → Firestore + Auth
-enabling → creating the one user → pasting UID into rules and publishing →
-getting the web config → service account key → Gemini API key → running
-`generate_cards.py` with `--type` / `--topic` → pushing the repo → enabling
-GitHub Pages (Settings > Pages > Deploy from branch, folder `/web`) → the
-3-step study flow. Also documents `?demo`.
+Walks through, in order: local run → adding cards → from-scratch Firebase
+setup → GitHub Pages deploy → the 3-step study flow. Also documents `?demo`.
 
-Note: GitHub Pages "Deploy from a branch" cannot serve a subfolder as the
-site root unless you pick the `/docs` folder specifically — `/web` is not an
-option in that dropdown. Either rename `web/` to `docs/`, move the 3 files to
-the repo root, or use a GitHub Actions Pages workflow. Decide this at deploy
-time; the README currently says `/web` and needs correcting to match whatever
-you choose.
+**Deploy**: `.github/workflows/pages.yml` uploads `web/` as the Pages
+artifact (`upload-pages-artifact` → `deploy-pages`), triggered on push to
+`main` touching `web/**`, or manually. Repo Settings > Pages > Source must be
+set to **GitHub Actions** (one time). This sidesteps the "Deploy from a
+branch" limitation (that mode only serves repo root or `/docs`, never
+`/web`). Published at `https://<user>.github.io/restudy/` — the app uses only
+relative asset paths + CDN imports, so the `/restudy/` subpath is fine.
+**Firebase Auth → Settings → Authorized domains must include
+`<user>.github.io`** or sign-in fails on the live site.
 
 ## 9. Known open questions / things to decide before or during implementation
 
