@@ -1,182 +1,123 @@
-# restudy — kişisel aralıklı tekrar uygulaması
+# restudy
 
-Notlarını / çıkmış soruları yerelde Gemini ile Q&A kartlarına çevirir,
-Firestore'da saklar ve GitHub Pages'te barınan statik bir web arayüzünden
-çalışırsın. **Yazıp deploy ettiğin bir sunucu kodu yok** — arka uç Firebase'in
-yönettiği servisler (Firestore veritabanı + Auth); web arayüzü salt statik
-dosyalar, tüm mantık tarayıcıda döner.
+**Turns notes into flashcards so my brain recalls them.**
 
-- `generate_cards.py` — notlardan Gemini ile kart **üretir**
-- `import_kpss.py` — hazır soru-cevap içeriğinden (ÖSYM PDF / URL / dosya)
-  kartları **aynen çıkarır**
-- `check_firestore.py` — bir seferlik bağlantı testi
-- `web/` — statik dosyalar (`index.html`, `style.css`, `app.js`,
-  `firebase-config.js`), tüm mantık tarayıcıda döner
-- Ayrıntılı mimari ve teknik spec için `HANDOFF.md`
+Kişisel aralıklı tekrar (spaced repetition) uygulaması. Notlarımı ve çıkmış
+soruları yerelde Gemini ile soru-cevap kartlarına çeviririm, Firestore'a
+yazarım, kartları GitHub Pages'teki statik bir web arayüzünden çalışırım.
 
-Her kartın bir **türü** (`yazilim` veya `kpss`) ve bir **konusu** (serbest
-metin, ör. `React`, `Tarih`) vardır. Web arayüzü 3 adımdır:
-**1) tür seç → 2) konu seç → 3) o konunun hazır kartlarını çalış.**
+Tek kullanıcılık — `firestore.rules` bir Firebase UID'ne kilitli. Yayındaki
+site herkese açık görünür ama kartları sadece o hesap (şifreyle) görebilir.
+
+---
+
+## Nasıl çalışıyor
+
+```
+  notlar / ÖSYM PDF / URL            Firestore              GitHub Pages
+        │                          ┌─────────────┐        ┌───────────────┐
+  generate_cards.py  ───── yaz ──▶ │  cards      │ ◀────▶ │ web/ (statik) │
+  import_kpss.py                   │  front/back │  Fire- │ auth, okuma,  │
+  (yerel · Gemini +                │  SM-2 state │  base  │ SM-2, yazma   │
+   admin SDK)                      └─────────────┘  JS SDK │ hepsi browser │
+                                                          └───────────────┘
+```
+
+- **Yazıp deploy edilen sunucu kodu yok.** Arka uç = Firebase'in yönettiği
+  Firestore + Auth. Web arayüzü salt statik dosya, tüm mantık tarayıcıda.
+- Kart üretimi yerelde, elle çalıştırılan Python script'leriyle.
+
+## Kart modeli
+
+Her kartın bir **türü** (`yazilim` | `kpss`) ve bir **konusu** (serbest metin,
+ör. `React`, `Tarih`) var. Arayüz 3 adım:
+**tür seç → konu seç → o konunun hazır kartlarını çalış.**
+Notlama (Tekrar / Zor / İyi / Kolay) SM-2 ile sonraki tekrar tarihini hesaplar.
 
 ---
 
 ## Çalıştırma (yerel)
 
 ```bash
-cd web
-python -m http.server 8000
+cd web && python -m http.server 8000
 ```
 
-- <http://localhost:8000/> → gerçek mod. Firebase'de oluşturduğun
-  **e-posta + şifre** ile giriş yap.
-- <http://localhost:8000/?demo> → Firebase baypas, örnek kartlarla arayüz
-  denemesi (hiçbir şey kaydedilmez, giriş yok).
+| URL | |
+|---|---|
+| `localhost:8000/` | gerçek mod — Firebase hesabıyla giriş |
+| `localhost:8000/?demo` | Firebase baypas, örnek kartlar, giriş yok |
 
-`web/` dosyalarını değiştirdiğinde `index.html` içindeki `?v=N` numaralarını
-artır (`app.js?v=2`, `style.css?v=2`) — yoksa tarayıcı eski sürümü gösterir.
-
----
+`web/` dosyalarını değiştirince `index.html` içindeki `?v=N` numaralarını
+artır (`app.js?v=2`, `style.css?v=2`) — yoksa tarayıcı eskisini gösterir.
 
 ## Kart ekleme
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env      # içine GEMINI_API_KEY yaz
+cp .env.example .env        # içine GEMINI_API_KEY
 ```
 
-### A) Notlardan kart (`generate_cards.py`)
-
-Kendi notlarından Gemini kart **üretir**. `--type` (`yazilim` | `kpss`) ve
-`--topic` zorunlu.
+**Notlardan üret** — Gemini notu okuyup kart yazar:
 
 ```bash
-python generate_cards.py notes/react_notlari.md --type yazilim --topic "React"
-python generate_cards.py notes/kpss/tarih.md    --type kpss    --topic "Tarih"
+python generate_cards.py notes/react.md --type yazilim --topic "React"
 ```
 
-### B) Hazır sorulardan kart (`import_kpss.py`)
-
-Zaten soru-cevap olan içerikten kartları **aynen çıkarır** (soru yazmaz,
-cevap uydurmaz). Kaynak: ÖSYM PDF, bir URL veya kaydettiğin yerel dosya
-(`.html` / `.txt` / `.md`). Hem çoktan seçmeli hem açık uçlu biçimi işler.
+**Hazır sorulardan çıkar** — Gemini soruyu aynen aktarır, uydurmaz. Kaynak:
+ÖSYM PDF, URL veya yerel `.html`/`.txt`/`.md`. Çoktan seçmeli + açık uçlu.
 
 ```bash
-# önce --dry-run ile ne çıkacağını gör (Firestore'a yazmaz)
 python import_kpss.py notes/kpss/gy-gk_2024.pdf --topic "GY-GK 2024" --dry-run
-python import_kpss.py https://site.com/kpss/tarih --topic "Tarih" --dry-run
-
-# iyi görünüyorsa --dry-run'ı kaldır
-python import_kpss.py notes/kpss/kaydettigim.html --topic "Tarih"
 ```
 
-Bayraklar:
+`import_kpss.py` bayrakları: `--vision` (PDF/görüntüyü doğrudan Gemini'ye,
+OCR — taranmış / görsel-ağırlıklı kaynaklar için), `--auto-topic` (her kartı
+dersine göre ayrı konuya yazar), `--dry-run` (yazmadan göster),
+`--keep-suspect`, `--limit N`. Aynı konuya tekrar import kopyaları atlar.
 
-- **`--vision`** — PDF/görüntüyü metne çevirmeden doğrudan Gemini'ye verir
-  (OCR). Görsel-ağırlıklı ÖSYM PDF'leri, taranmış sayfalar, ekran
-  görüntüleri için — metin modundan çok daha temiz. Biraz pahalı/yavaş,
-  yerel dosya ister.
-- **`--auto-topic`** — her kartı Gemini'nin belirlediği derse yazar
-  (Tarih / Coğrafya / Türkçe / Matematik / Vatandaşlık / Güncel Bilgiler).
-  Karışık ÖSYM GY-GK kitapçıkları için ideal. `--topic` yedek kalır.
-- **`--keep-suspect`** — `⚠ ŞÜPHELİ` (metni bozuk) kartlar normalde atlanır,
-  bununla yazılır.
-- **`--limit N`** — en fazla N kart.
-
-```bash
-python import_kpss.py notes/kpss/gy-gk_2024.pdf --topic "GY-GK 2024" --vision --auto-topic --dry-run
-```
-
-Notlar:
-
-- Aynı konuya ikinci kez import edersen kopyalar (soru metnine göre) atlanır.
-- ÖSYM sadece sınavın %10'unu yayımlar (~12 soru). Matematik soruları görsel
-  → metin modunda çıkmaz, `--vision` gerekir.
-- Blog tipi "Soru/Cevap" sayfaları (ör. tarihvakti.com) temiz çıkar; ifade
-  adayların hatırlamasıyla yazıldığı için resmi değildir.
-- Ticari yayınevi soru bankaları / korsan doküman siteleri **kapsam dışı**.
-- Kaynak ayrıntıları: `HANDOFF.md` §9.
-
-### Ortak
-
-Her yeni kart hemen "due" olur, web arayüzünde ilgili tür + konu altında
-görünür. Konu adı serbest metin — `"Tarih"` ve `"tarih"` iki ayrı konu olur,
-tutarlı yaz.
+`check_firestore.py` — yaz/oku/sil zincirini test eder, bağlantıyı doğrular.
 
 ---
 
-## Firebase kurulumu (referans)
+## Kendine kurmak istersen
 
-Firebase tarafı zaten kurulu ve `web/firebase-config.js` + yayımlanmış
-`firestore.rules` repoda. Bu bölüm o kurulumun ne olduğunu belgeler —
-sıfırdan tekrar kurman gerekirse diye.
+### 1 · Firebase
 
-### 1. Firebase projesi
+1. [console.firebase.google.com](https://console.firebase.google.com) → yeni proje
+2. **Firestore Database** → Create (production mode)
+3. **Authentication** → Email/Password sağlayıcısını aç →
+   **Users** → Add user (e-posta + şifre) → **UID**'yi kopyala
+4. `firestore.rules` içindeki UID'yi kendininkiyle değiştir →
+   konsol **Firestore → Rules** → yapıştır → **Publish**
+5. **Project settings → General → Your apps → Web app** →
+   `firebaseConfig` değerlerini `web/firebase-config.js` içine yaz
+   (gizli değil, commit edilebilir)
+6. **Project settings → Service accounts → Generate new private key** →
+   script'lerin yanına `serviceAccountKey.json` (asla commit etme)
 
-1. [console.firebase.google.com](https://console.firebase.google.com) → yeni proje.
-2. **Firestore Database** → **Create database** → **production mode**.
-3. **Authentication** → **Get started** → **Sign-in method** →
-   **Email/Password** sağlayıcısını etkinleştir.
-4. **Authentication** → **Users** → **Add user** → e-posta + şifre.
-   Oluşan kullanıcının **UID**'sini kopyala.
+### 2 · Gemini
 
-### 2. Güvenlik kuralları
+[aistudio.google.com](https://aistudio.google.com) → Get API key →
+`.env` içine `GEMINI_API_KEY=...`
 
-1. `firestore.rules` içindeki UID'yi 1.4'te kopyaladığınla değiştir.
-2. Firebase konsolu → **Firestore Database** → **Rules** → dosyanın
-   içeriğini yapıştır → **Publish**.
+### 3 · Deploy (GitHub Pages)
 
-Sonuç: site ve Firebase config herkese açık olsa da, Firestore o tek UID ile
-kimlik doğrulanmamış her okuma/yazmayı reddeder.
+`.github/workflows/pages.yml` `web/` klasörünü Pages'e yükler.
 
-### 3. Web config
+1. Repo → **Settings → Pages → Source: GitHub Actions**
+2. `main`'e push (`web/**` değişmişse) → **Actions** sekmesinden izle,
+   veya "Run workflow" ile elle
+3. Firebase → **Authentication → Settings → Authorized domains** →
+   `<kullanıcı>.github.io` ekle *(yoksa yayında giriş çalışmaz)*
 
-**Project settings** → **General** → **Your apps** → **Web app** → gösterilen
-`firebaseConfig` değerlerini `web/firebase-config.js` içine yaz. Bu değerler
-gizli değildir, commit edilebilir.
-
-### 4. Service account (yalnızca yerel script için)
-
-**Project settings** → **Service accounts** → **Generate new private key** →
-inen dosyayı script'lerin yanına `serviceAccountKey.json` olarak kaydet.
-**Asla commit etme** — `.gitignore`'da.
-
-### 5. Gemini API anahtarı
-
-[aistudio.google.com](https://aistudio.google.com) → **Get API key** →
-`.env` içine `GEMINI_API_KEY=...`.
-
-### 6. Doğrula
-
-```bash
-python check_firestore.py
-```
-
-Yaz → oku → sil zincirini test eder. Hepsi `[OK]` ise kurulum tamam.
+Yayın: `https://<kullanıcı>.github.io/restudy/`
 
 ---
 
-## Yayınlama (GitHub Pages)
+## Yığın
 
-`web/` klasörünü Pages'e yükleyen bir GitHub Actions workflow'u var
-(`.github/workflows/pages.yml`). Yapman gerekenler:
+Statik HTML/CSS/JS (framework yok) · Firebase v10 modüler SDK (CDN) ·
+Firestore · Firebase Auth · Gemini API (`gemini-3.1-flash-lite`) ·
+Python (`firebase-admin`, `pymupdf`) · SM-2 aralıklı tekrar.
 
-1. Repo → **Settings** → **Pages** → **Source: GitHub Actions** seç.
-2. `main`'e her push'ta (`web/**` değiştiyse) workflow çalışır; **Actions**
-   sekmesinden takip et. Elle tetiklemek için: Actions → "Deploy web/ to
-   GitHub Pages" → **Run workflow**.
-3. Firebase konsolu → **Authentication** → **Settings** → **Authorized
-   domains** → `<kullanıcı>.github.io` ekle. **Bu olmadan yayındaki sitede
-   giriş çalışmaz** (localhost varsayılan olarak ekli).
-
-Yayın URL'si: `https://<kullanıcı>.github.io/restudy/`
-
----
-
-## Kullanım
-
-1. **Tür seç** — Yazılım veya KPSS (kaç kart hazır yazar).
-2. **Konu seç** — o türdeki konular, "hazır / toplam" sayısıyla. Bitmiş
-   konular ✓ ile soluk.
-3. **Çalış** — soru → **Cevabı göster** (boşluk tuşu) → **Tekrar / Zor /
-   İyi / Kolay** (1–4 tuşları). SM-2 sonraki tekrarı hesaplar. "← Konu" ile
-   başka konuya geç.
+Teknik detay ve tasarım kararları: [`HANDOFF.md`](HANDOFF.md).
