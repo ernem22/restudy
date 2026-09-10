@@ -2,20 +2,21 @@
 
 Turns notes into flashcards so my brain recalls them.
 
-Aralıklı tekrar (SM-2) kart uygulaması. `generate_cards.py` / `import_kpss.py`
-yerelde notları ve çıkmış soruları Gemini ile karta çevirip Firestore'a yazar;
-`web/` bunları GitHub Pages'te barınan statik bir arayüzden sunar.
+A spaced-repetition (SM-2) flashcard app. `generate_cards.py` /
+`import_kpss.py` run locally, turning notes and past exam questions into cards
+with Gemini and writing them to Firestore; `web/` serves them from a static
+site on GitHub Pages.
 
-- Yazılan/deploy edilen sunucu kodu yok — arka uç Firebase (Firestore + Auth),
-  tüm mantık tarayıcıda.
-- Tek kullanıcılık: `firestore.rules` tek bir Firebase UID'ne kilitli.
-- Kart modeli: her kartın bir **türü** (`yazilim` | `kpss`) ve bir **konusu**
-  (serbest metin) var. Arayüz: tür → konu → o konunun due kartları. Notlama
-  (Tekrar / Zor / İyi / Kolay) sonraki tekrar tarihini belirler.
+- No server code to write or deploy — the backend is Firebase (Firestore +
+  Auth); all logic runs in the browser.
+- Single-user: `firestore.rules` is locked to one Firebase UID.
+- Card model: every card has a **type** (`yazilim` | `kpss`) and a **topic**
+  (free text). The UI is type → topic → that topic's due cards. Grading
+  (Again / Hard / Good / Easy) sets the next review date.
 
 ---
 
-## Çalıştırma (yerel)
+## Run it (local)
 
 ```bash
 cd web && python -m http.server 8000
@@ -23,80 +24,82 @@ cd web && python -m http.server 8000
 
 | URL | |
 |---|---|
-| `localhost:8000/` | gerçek mod — Firebase hesabıyla giriş |
-| `localhost:8000/?demo` | Firebase baypas, örnek kartlar, giriş yok |
+| `localhost:8000/` | real mode — sign in with the Firebase account |
+| `localhost:8000/?demo` | Firebase bypassed, sample cards, no sign-in |
 
-`web/` dosyalarını değiştirince `index.html` içindeki `?v=N` numaralarını
-artır (`app.js?v=2`, `style.css?v=2`) — yoksa tarayıcı eskisini gösterir.
+When you change files in `web/`, bump the `?v=N` on the assets in
+`index.html` (`app.js?v=2`, `style.css?v=2`) or the browser serves the stale
+version.
 
-## Kart ekleme
+## Adding cards
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env        # içine GEMINI_API_KEY
+cp .env.example .env        # put your GEMINI_API_KEY in it
 ```
 
-**Notlardan üret** — Gemini notu okuyup kart yazar:
+**Generate from notes** — Gemini reads the note and writes cards:
 
 ```bash
 python generate_cards.py notes/react.md --type yazilim --topic "React"
 ```
 
-**Hazır sorulardan çıkar** — Gemini soruyu aynen aktarır, uydurmaz. Kaynak:
-ÖSYM PDF, URL veya yerel `.html`/`.txt`/`.md`. Çoktan seçmeli + açık uçlu.
+**Extract from ready Q&A** — Gemini copies questions verbatim, never invents.
+Source: an ÖSYM PDF, a URL, or a local `.html`/`.txt`/`.md`. Multiple-choice
+and open-ended both work.
 
 ```bash
 python import_kpss.py notes/kpss/gy-gk_2024.pdf --topic "GY-GK 2024" --dry-run
 ```
 
-`import_kpss.py` bayrakları: `--vision` (PDF/görüntüyü doğrudan Gemini'ye,
-OCR — taranmış / görsel-ağırlıklı kaynaklar için), `--auto-topic` (her kartı
-dersine göre ayrı konuya yazar), `--dry-run` (yazmadan göster),
-`--keep-suspect`, `--limit N`. Aynı konuya tekrar import kopyaları atlar.
+`import_kpss.py` flags: `--vision` (send the PDF/image straight to Gemini for
+OCR — for scanned / image-heavy sources), `--auto-topic` (write each card to
+its own subject topic), `--dry-run` (show without writing), `--keep-suspect`,
+`--limit N`. Re-importing the same topic skips duplicates.
 
-`check_firestore.py` — yaz/oku/sil zincirini test eder, bağlantıyı doğrular.
+`check_firestore.py` — write/read/delete round-trip to verify the connection.
 
 ---
 
-## Kendine kurmak istersen
+## Setting it up yourself
 
 ### 1 · Firebase
 
-1. [console.firebase.google.com](https://console.firebase.google.com) → yeni proje
+1. [console.firebase.google.com](https://console.firebase.google.com) → new project
 2. **Firestore Database** → Create (production mode)
-3. **Authentication** → Email/Password sağlayıcısını aç →
-   **Users** → Add user (e-posta + şifre) → **UID**'yi kopyala
-4. `firestore.rules` içindeki UID'yi kendininkiyle değiştir →
-   konsol **Firestore → Rules** → yapıştır → **Publish**
+3. **Authentication** → enable the Email/Password provider →
+   **Users** → Add user (email + password) → copy its **UID**
+4. Replace the UID in `firestore.rules` with yours →
+   console **Firestore → Rules** → paste → **Publish**
 5. **Project settings → General → Your apps → Web app** →
-   `firebaseConfig` değerlerini `web/firebase-config.js` içine yaz
-   (gizli değil, commit edilebilir)
+   put the `firebaseConfig` values into `web/firebase-config.js`
+   (not secret, safe to commit)
 6. **Project settings → Service accounts → Generate new private key** →
-   script'lerin yanına `serviceAccountKey.json` (asla commit etme)
+   save as `serviceAccountKey.json` next to the scripts (never commit)
 
 ### 2 · Gemini
 
 [aistudio.google.com](https://aistudio.google.com) → Get API key →
-`.env` içine `GEMINI_API_KEY=...`
+`GEMINI_API_KEY=...` in `.env`
 
 ### 3 · Deploy (GitHub Pages)
 
-`.github/workflows/pages.yml` `web/` klasörünü Pages'e yükler.
+`.github/workflows/pages.yml` uploads `web/` to Pages.
 
 1. Repo → **Settings → Pages → Source: GitHub Actions**
-2. `main`'e push (`web/**` değişmişse) → **Actions** sekmesinden izle,
-   veya "Run workflow" ile elle
-3. Firebase → **Authentication → Settings → Authorized domains** →
-   `<kullanıcı>.github.io` ekle *(yoksa yayında giriş çalışmaz)*
+2. Push to `main` (when `web/**` changed) → watch the **Actions** tab, or
+   trigger it manually with "Run workflow"
+3. Firebase → **Authentication → Settings → Authorized domains** → add
+   `<user>.github.io` *(without this, sign-in fails on the live site)*
 
-Yayın: `https://<kullanıcı>.github.io/restudy/`
+Live at `https://<user>.github.io/restudy/`
 
 ---
 
-## Yığın
+## Stack
 
-Statik HTML/CSS/JS (framework yok) · Firebase v10 modüler SDK (CDN) ·
+Static HTML/CSS/JS (no framework) · Firebase v10 modular SDK (CDN) ·
 Firestore · Firebase Auth · Gemini API (`gemini-3.1-flash-lite`) ·
-Python (`firebase-admin`, `pymupdf`) · SM-2 aralıklı tekrar.
+Python (`firebase-admin`, `pymupdf`) · SM-2 spaced repetition.
 
-Teknik detay ve tasarım kararları: [`HANDOFF.md`](HANDOFF.md).
+Technical detail and design decisions: [`HANDOFF.md`](HANDOFF.md).
