@@ -1,38 +1,17 @@
 # restudy
 
-**Turns notes into flashcards so my brain recalls them.**
+Turns notes into flashcards so my brain recalls them.
 
-Kişisel aralıklı tekrar (spaced repetition) uygulaması. Notlarımı ve çıkmış
-soruları yerelde Gemini ile soru-cevap kartlarına çeviririm, Firestore'a
-yazarım, kartları GitHub Pages'teki statik bir web arayüzünden çalışırım.
+Aralıklı tekrar (SM-2) kart uygulaması. `generate_cards.py` / `import_kpss.py`
+yerelde notları ve çıkmış soruları Gemini ile karta çevirip Firestore'a yazar;
+`web/` bunları GitHub Pages'te barınan statik bir arayüzden sunar.
 
-Tek kullanıcılık — `firestore.rules` bir Firebase UID'ne kilitli. Yayındaki
-site herkese açık görünür ama kartları sadece o hesap (şifreyle) görebilir.
-
----
-
-## Nasıl çalışıyor
-
-```
-  notlar / ÖSYM PDF / URL            Firestore              GitHub Pages
-        │                          ┌─────────────┐        ┌───────────────┐
-  generate_cards.py  ───── yaz ──▶ │  cards      │ ◀────▶ │ web/ (statik) │
-  import_kpss.py                   │  front/back │  Fire- │ auth, okuma,  │
-  (yerel · Gemini +                │  SM-2 state │  base  │ SM-2, yazma   │
-   admin SDK)                      └─────────────┘  JS SDK │ hepsi browser │
-                                                          └───────────────┘
-```
-
-- **Yazıp deploy edilen sunucu kodu yok.** Arka uç = Firebase'in yönettiği
-  Firestore + Auth. Web arayüzü salt statik dosya, tüm mantık tarayıcıda.
-- Kart üretimi yerelde, elle çalıştırılan Python script'leriyle.
-
-## Kart modeli
-
-Her kartın bir **türü** (`yazilim` | `kpss`) ve bir **konusu** (serbest metin,
-ör. `React`, `Tarih`) var. Arayüz 3 adım:
-**tür seç → konu seç → o konunun hazır kartlarını çalış.**
-Notlama (Tekrar / Zor / İyi / Kolay) SM-2 ile sonraki tekrar tarihini hesaplar.
+- Yazılan/deploy edilen sunucu kodu yok — arka uç Firebase (Firestore + Auth),
+  tüm mantık tarayıcıda.
+- Tek kullanıcılık: `firestore.rules` tek bir Firebase UID'ne kilitli.
+- Kart modeli: her kartın bir **türü** (`yazilim` | `kpss`) ve bir **konusu**
+  (serbest metin) var. Arayüz: tür → konu → o konunun due kartları. Notlama
+  (Tekrar / Zor / İyi / Kolay) sonraki tekrar tarihini belirler.
 
 ---
 
