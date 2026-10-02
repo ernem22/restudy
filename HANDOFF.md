@@ -75,6 +75,7 @@ Single collection: `cards`. One document per card, auto-generated ID.
 {
   front: string,          // question
   back: string,           // answer
+  detail: string,         // optional long explanation (shown collapsed after reveal; "" = hidden)
   type: "yazilim" | "kpss",  // required — chosen on the CLI, filtered in step 1
   topic: string,          // required — free-text konu, e.g. "React", "Anayasa"
   tags: string[],         // extra model-suggested tags + [type, topic] for search

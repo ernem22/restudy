@@ -78,6 +78,10 @@ text.
 exact shape:
 [{"front": "...", "back": "...", "tags": ["optional","short","tags"]}]
 8. If the text is too short or has nothing worth testing, return [].
+9. If the answer alone is not enough to understand WHY (a beginner \
+would still be stuck), add a "detail" string: 1-3 sentences explaining \
+the reason, a tiny example, or the context. Otherwise omit "detail" \
+entirely -- most cards don't need it.
 """
 
 
@@ -117,6 +121,7 @@ def call_gemini(model, chunk: str, retries: int = 3) -> list[dict]:
                         "front": str(c["front"]).strip(),
                         "back": str(c["back"]).strip(),
                         "tags": c.get("tags", []) or [],
+                        "detail": str(c.get("detail", "") or "").strip(),
                     })
             return cleaned
         except Exception as e:
@@ -188,6 +193,7 @@ def main():
                 doc = {
                     "front": card["front"],
                     "back": card["back"],
+                    "detail": card.get("detail", ""),
                     "type": args.card_type,
                     "topic": topic,
                     "tags": sorted(set(card["tags"] + [args.card_type, topic])),

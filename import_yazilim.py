@@ -12,13 +12,17 @@ Beklenen format (notes/yazilim/*.md):
 
     Soru: useState ne işe yarar?
     Cevap: Function component'lerde state tanımlayan Hook'tur.
+    Detay: İlk render'da verilen değer kullanılır, setter çağrısı re-render tetikler.
+            Neden gerekli: ... (opsiyonel, çok satır olabilir)
 
     Soru: ...
     Cevap: ...
 
 Kurallar: her blok "Soru:" satırıyla başlar, "Cevap:" satırı (tek veya
-çok satır) ile devam eder. İlk "Soru:" satırından önceki her şey (başlık,
-kullanım notu) yok sayılır.
+çok satır) ile devam eder. "Detay:" satırı opsiyoneldir — cevabın
+yetmediği durumda gösterilen uzun açıklamadır; sonraki "Soru:" satırına
+kadar olan tüm satırlar detaya dahildir. İlk "Soru:" satırından önceki
+her şey (başlık, kullanım notu) yok sayılır.
 
 Kullanım:
     python import_yazilim.py notes/yazilim/react-kolay.md --topic "React Kolay" --dry-run
@@ -58,6 +62,7 @@ def parse_qa(text: str) -> tuple[list[dict], int]:
     skipped = 0
     cur_q: list[str] | None = None
     cur_a: list[str] | None = None
+    cur_d: list[str] | None = None
 
     def flush():
         nonlocal skipped
@@ -65,8 +70,9 @@ def parse_qa(text: str) -> tuple[list[dict], int]:
             return
         q = " ".join(cur_q).strip()
         a = " ".join(cur_a).strip() if cur_a else ""
+        d = " ".join(cur_d).strip() if cur_d else ""
         if q and a:
-            cards.append({"front": q, "back": a})
+            cards.append({"front": q, "back": a, "detail": d})
         else:
             skipped += 1
 
@@ -76,11 +82,16 @@ def parse_qa(text: str) -> tuple[list[dict], int]:
             flush()
             cur_q = [line[len("Soru:"):].strip()]
             cur_a = None
+            cur_d = None
         elif line.startswith("Cevap:") and cur_q is not None:
             cur_a = [line[len("Cevap:"):].strip()]
+        elif line.startswith("Detay:") and cur_q is not None:
+            cur_d = [line[len("Detay:"):].strip()]
         elif cur_q is not None and line:
-            # Cevap'ın devam satırı (çok satırlı cevap desteği)
-            if cur_a is not None:
+            # Devam satırı: Detay varsa detaya, yoksa cevaba (veya soruya) eklenir
+            if cur_d is not None:
+                cur_d.append(line)
+            elif cur_a is not None:
                 cur_a.append(line)
             else:
                 cur_q.append(line)
@@ -147,6 +158,8 @@ def main():
             for c in cards[:3]:
                 n += 1
                 print(f"[{n}] {c['front']}\n    -> {c['back'][:120]}")
+                if c.get("detail"):
+                    print(f"    [detay] {c['detail'][:120]}")
             if len(cards) > 3:
                 print(f"    ... (+{len(cards) - 3} soru daha)")
         return
@@ -171,6 +184,7 @@ def main():
             db.collection("cards").add({
                 "front": c["front"],
                 "back": c["back"],
+                "detail": c.get("detail", ""),
                 "type": args.card_type,
                 "topic": topic,
                 "tags": [args.card_type, topic],

@@ -79,6 +79,8 @@ const studyBack = document.getElementById("study-back");
 const cardEl = document.getElementById("card");
 const frontText = document.getElementById("front-text");
 const backText = document.getElementById("back-text");
+const detailBlock = document.getElementById("detail-block");
+const detailText = document.getElementById("detail-text");
 const cardBack = cardEl.querySelector(".card-back");
 const revealBtn = document.getElementById("reveal-btn");
 const gradeButtons = document.getElementById("grade-buttons");
@@ -306,6 +308,9 @@ function renderCard() {
   cardEl.classList.toggle("choices", hasChoices(front));
   frontText.textContent = front;
   backText.textContent = "";
+  detailText.textContent = "";
+  detailBlock.open = false;
+  detailBlock.classList.add("hidden");
   cardBack.classList.add("hidden");
   cardEl.classList.remove("revealed");
   gradeButtons.classList.add("hidden");
@@ -328,6 +333,11 @@ revealBtn.addEventListener("click", () => {
   const card = state.queue[state.index];
   if (!card) return;
   backText.textContent = collapseWs(card.back);
+  const detail = collapseWs(card.detail);
+  if (detail) {
+    detailText.textContent = detail;
+    detailBlock.classList.remove("hidden");
+  }
   cardBack.classList.remove("hidden");
   cardEl.classList.add("revealed");
   revealBtn.classList.add("hidden");
@@ -429,12 +439,13 @@ document.addEventListener("keydown", (e) => {
 
 function demoCards() {
   const base = { repetitions: 0, easeFactor: 2.5, interval: 0 };
-  const mk = (type, topic, front, back) => ({
+  const mk = (type, topic, front, back, detail = "") => ({
     id: `${type}-${topic}-${front}`.slice(0, 40),
     type,
     topic,
     front,
     back,
+    detail,
     tags: [type, topic],
     nextReview: new Date(Date.now() - 1000),
     ...base,
@@ -445,7 +456,8 @@ function demoCards() {
     mk("yazilim", "SM-2", "repetitions = 1 iken doğru cevapta interval kaça çıkar?", "6 gün"),
     mk("yazilim", "SM-2", '"Tekrar" (grade 0) verince repetitions ne olur?', "0'a sıfırlanır, interval 1 güne düşer."),
     mk("yazilim", "React", "useEffect'in bağımlılık dizisi boşsa etki ne zaman çalışır?", "Sadece ilk render'dan sonra bir kez."),
-    mk("yazilim", "React", "React'te key prop ne işe yarar?", "Liste elemanlarını render'lar arası eşleştirip gereksiz yeniden oluşturmayı önler."),
+    mk("yazilim", "React", "React'te key prop ne işe yarar?", "Liste elemanlarını render'lar arası eşleştirip gereksiz yeniden oluşturmayı önler.",
+      "React varsayılan olarak elemanları sıraya göre eşleştirir; listenin başına eleman eklenince tüm alt ağaç gereksiz güncellenir. Stabil bir key (veritabanı id'si) verirsen React elemanları taşır, sadece değişen yer güncellenir."),
     mk("kpss", "Anayasa Hukuku", "1982 Anayasası'na göre egemenlik kime aittir?", "Kayıtsız şartsız millete."),
     mk("kpss", "Anayasa Hukuku", "TBMM üye tam sayısı kaçtır?", "600"),
     mk("kpss", "Anayasa Hukuku", "Anayasa Mahkemesi kaç üyeden oluşur?", "15"),

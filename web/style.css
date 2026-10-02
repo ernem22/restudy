@@ -439,6 +439,60 @@ button {
   color: var(--on-paper-soft);
 }
 
+/* detaylı açıklama: cevap yetmeyince açılan katman.
+   Kapalı başlar, recall akışını bozmaz; details/summary native. */
+.card-detail {
+  margin: 0 auto;
+  max-width: 44ch;
+  border-top: 1px dashed var(--paper-edge);
+  padding-top: 0.35rem;
+}
+
+.card-detail summary {
+  display: inline-block;
+  padding: 12px 4px;
+  min-height: 44px;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--amber-deep);
+  cursor: pointer;
+  list-style: none;
+}
+
+.card-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+.card-detail summary::before {
+  content: "+ ";
+  font-weight: 700;
+}
+
+.card-detail[open] summary::before {
+  content: "– ";
+}
+
+.card-detail summary:hover {
+  color: var(--amber);
+}
+
+.card-detail summary:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.card-detail #detail-text {
+  margin: 0 0 0.25rem;
+  max-width: 44ch;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
 /* çoktan seçmeli kartlar: satır sonlarını koru, sola daya, biraz küçült */
 .card.choices {
   justify-content: flex-start;
@@ -651,6 +705,10 @@ button {
 
   .card-back p {
     font-size: 1.08rem;
+  }
+
+  .card-detail #detail-text {
+    font-size: 0.95rem;
   }
 
   .grade {
