@@ -68,6 +68,14 @@ button {
   flex-direction: column;
 }
 
+/* çalışma ekranı: topbar ve kontroller sabit, kart alanı kendi içinde kayar */
+#study-screen {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
 #signin-screen,
 #empty-screen {
   align-items: center;
@@ -350,10 +358,12 @@ button {
 /* ---- sahne + deste ---- */
 
 .stage {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 24px 20px;
 }
 
@@ -361,6 +371,7 @@ button {
   position: relative;
   width: 100%;
   max-width: var(--card-w);
+  margin: auto;
 }
 
 /* arkada istiflenmiş kart kenarları — "devam eden bir deste" hissi */
@@ -439,58 +450,234 @@ button {
   color: var(--on-paper-soft);
 }
 
-/* detaylı açıklama: cevap yetmeyince açılan katman.
-   Kapalı başlar, recall akışını bozmaz; details/summary native. */
-.card-detail {
-  margin: 0 auto;
-  max-width: 44ch;
-  border-top: 1px dashed var(--paper-edge);
-  padding-top: 0.35rem;
-}
+/* ---- öğretici kaynak: buton + tam ekran okuma yüzü ----
 
-.card-detail summary {
-  display: inline-block;
-  padding: 12px 4px;
-  min-height: 44px;
-  font-family: var(--sans);
-  font-size: 0.85rem;
+   Kart cevap verince görünen buton, kaynağı tam ekran bir ders sayfası
+   olarak açar. Küçük cevaplar buraya taşınmaz; bu yüzey büyük kaynağın
+   (konu anlatımının) yeridir.
+*/
+
+.lesson-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0.25rem auto 0;
+  padding: 10px 18px;
+  border: 1px solid var(--paper-edge);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--amber-deep);
   cursor: pointer;
-  list-style: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.card-detail summary::-webkit-details-marker {
-  display: none;
-}
-
-.card-detail summary::before {
-  content: "+ ";
+.lesson-btn .lesson-btn-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35em;
+  height: 1.35em;
+  border-radius: 999px;
+  background: var(--amber);
+  color: #1c1206;
   font-weight: 700;
 }
 
-.card-detail[open] summary::before {
-  content: "– ";
+.lesson-btn:hover,
+.lesson-btn:focus-visible {
+  border-color: var(--amber-deep);
+  background: var(--amber-ghost);
+  outline: none;
 }
 
-.card-detail summary:hover {
-  color: var(--amber);
+/* tam ekran ders: mürekkep oda içindeki bir kitap sayfası */
+.lesson {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #223041 0%, var(--ink) 45%, var(--ink-2) 100%);
 }
 
-.card-detail summary:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: 2px;
-  border-radius: 4px;
+.lesson-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  gap: 10px;
+  padding: 16px 20px 10px;
 }
 
-.card-detail #detail-text {
-  margin: 0 0 0.25rem;
-  max-width: 44ch;
-  text-align: left;
-  font-size: 1rem;
+.lesson-top .link-back {
+  justify-self: start;
+  font-size: 0.88rem;
+}
+
+#lesson-label {
+  justify-self: center;
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--on-ink-soft);
+  text-align: center;
+}
+
+.lesson-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 20px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+
+.lesson-body {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 2.5rem 2.75rem;
+  background: var(--paper);
+  color: var(--on-paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: 6px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 30px 70px -20px rgba(0, 0, 0, 0.65);
+}
+
+.lesson-hint {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: var(--on-ink-faint);
+}
+
+/* ders gövdesi tipografisi */
+.lesson-body h1,
+.lesson-body h2,
+.lesson-body h3,
+.lesson-body h4 {
+  font-family: var(--serif);
+  font-weight: 500;
+  color: var(--on-paper);
+  line-height: 1.3;
+  margin: 1.8em 0 0.5em;
+}
+
+.lesson-body h1 {
+  margin-top: 0;
+  font-size: 1.85rem;
+}
+
+.lesson-body h2 {
+  margin-top: 0;
+  font-size: 1.55rem;
+  color: var(--amber-deep);
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--paper-edge);
+}
+
+.lesson-body h1 + h2,
+.lesson-body h2 + h3,
+.lesson-body h3 + h4 {
+  margin-top: 1em;
+}
+
+.lesson-body h3 {
+  font-size: 1.2rem;
+}
+
+.lesson-body h4 {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--on-paper-soft);
+}
+
+.lesson-body p {
+  margin: 0 0 1.1em;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.lesson-body li {
+  margin-bottom: 0.45em;
   line-height: 1.6;
-  white-space: pre-wrap;
+}
+
+.lesson-body ul,
+.lesson-body ol {
+  margin: 0 0 1.2em;
+  padding-left: 1.4em;
+}
+
+.lesson-body strong {
+  font-weight: 600;
+}
+
+.lesson-body hr {
+  margin: 2em auto;
+  border: none;
+  border-top: 1px solid var(--paper-edge);
+}
+
+.lesson-body code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.86em;
+  background: var(--paper-2);
+  border: 1px solid var(--paper-3);
+  border-radius: 5px;
+  padding: 0.12em 0.4em;
+}
+
+.lesson-body pre {
+  margin: 0 0 1.3em;
+  padding: 1.1rem 1.25rem;
+  background: var(--ink);
+  border-radius: 8px;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
+.lesson-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.88rem;
+  color: var(--paper-2);
+}
+
+.lesson-body blockquote {
+  margin: 0 0 1.3em;
+  padding: 0.5em 1.1em;
+  border-left: 3px solid var(--amber);
+  background: var(--amber-ghost);
+  border-radius: 0 8px 8px 0;
+}
+
+.lesson-body blockquote p {
+  margin: 0.3em 0;
+  color: var(--on-paper-soft);
+}
+
+.lesson-body a {
+  color: var(--amber-deep);
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-underline-offset: 2px;
+}
+
+.lesson-body a:hover {
+  color: var(--amber);
 }
 
 /* çoktan seçmeli kartlar: satır sonlarını koru, sola daya, biraz küçült */
@@ -508,6 +695,19 @@ button {
 .card.choices .card-front p {
   font-size: 1.15rem;
   line-height: 1.5;
+  white-space: normal;
+}
+
+/* soru kökü ve şıklar ayrı bloklar: şık kayınca devamı kendi altında kalır */
+.q-stem {
+  display: block;
+  margin-bottom: 0.6em;
+}
+
+.q-opt {
+  display: block;
+  padding-left: 1.9em;
+  text-indent: -1.9em;
 }
 
 .card.choices .card-back p {
@@ -707,8 +907,29 @@ button {
     font-size: 1.08rem;
   }
 
-  .card-detail #detail-text {
-    font-size: 0.95rem;
+  .lesson-btn {
+    font-size: 0.82rem;
+  }
+
+  .lesson-body {
+    padding: 1.5rem 1.35rem;
+  }
+
+  .lesson-body h1 {
+    font-size: 1.55rem;
+  }
+
+  .lesson-body h2 {
+    font-size: 1.3rem;
+  }
+
+  .lesson-body h3 {
+    font-size: 1.1rem;
+  }
+
+  .lesson-body p,
+  .lesson-body li {
+    font-size: 0.97rem;
   }
 
   .grade {

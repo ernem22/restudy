@@ -47,6 +47,7 @@ const state = {
   queue: [], // seçili konunun hazır kartları
   index: 0,
   loaded: false,
+  session: { unique: new Set(), again: 0 }, // seans özeti
 };
 
 // ---- dom -----------------------------------------------------------
@@ -73,20 +74,27 @@ const topicBack = document.getElementById("topic-back");
 
 const progressBar = document.getElementById("progress-bar");
 const deckEl = document.querySelector(".deck");
+const stageEl = document.querySelector(".stage");
 const deckName = document.getElementById("deck-name");
 const dueCount = document.getElementById("due-count");
 const studyBack = document.getElementById("study-back");
 const cardEl = document.getElementById("card");
 const frontText = document.getElementById("front-text");
 const backText = document.getElementById("back-text");
-const detailBlock = document.getElementById("detail-block");
-const detailText = document.getElementById("detail-text");
+const lessonOpen = document.getElementById("lesson-open");
+const lessonScreen = document.getElementById("lesson-screen");
+const lessonBody = document.getElementById("lesson-body");
+const lessonLabel = document.getElementById("lesson-label");
+const lessonClose = document.getElementById("lesson-close");
+const lessonScroll = lessonScreen.querySelector(".lesson-scroll");
 const cardBack = cardEl.querySelector(".card-back");
 const revealBtn = document.getElementById("reveal-btn");
 const gradeButtons = document.getElementById("grade-buttons");
 const goodInterval = document.getElementById("good-interval");
 const easyInterval = document.getElementById("easy-interval");
 const emptyBack = document.getElementById("empty-back");
+const emptyTitle = document.getElementById("empty-title");
+const emptySub = document.getElementById("empty-sub");
 
 // ---- yardımcılar --------------------------------------------------
 
@@ -109,6 +117,150 @@ function millis(v) {
 function isDue(card) {
   return millis(card.nextReview) <= Date.now();
 }
+
+// ---- öğretici kaynak (markdown okuyucu) -------------------------
+
+function escapeHtml(s) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// satır içi işaretleme: `kod`, **kalın**, *italik*, [metin](url)
+function inlineMd(s) {
+  let t = escapeHtml(s);
+  const codes = [];
+  t = t.replace(/`([^`]+)`/g, (_, c) => {
+    codes.push(c);
+    return `\u0000${codes.length - 1}\u0000`;
+  });
+  t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  t = t.replace(
+    /(^|[\s(])\*([^*\n]+)\*(?=[\s).,!?:;]|$)/g,
+    "$1<em>$2</em>",
+  );
+  t = t.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener">$1</a>',
+  );
+  t = t.replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${codes[Number(i)]}</code>`);
+  return t;
+}
+
+// küçük, bağımsız markdown ayrıştırıcı: başlık, liste, kod bloğu, alıntı, hr
+function mdToHtml(src) {
+  const lines = String(src || "").split("\n");
+  const out = [];
+  const para = [];
+  let i = 0;
+
+  const flushPara = () => {
+    if (para.length) {
+      out.push(`<p>${inlineMd(para.join(" "))}</p>`);
+      para.length = 0;
+    }
+  };
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // ``` kod bloğu: süreç aynı kapanışa kadar
+    if (/^\s*```/.test(line)) {
+      flushPara();
+      const body = [];
+      i += 1;
+      while (i < lines.length && !/^\s*```/.test(lines[i])) {
+        body.push(lines[i]);
+        i += 1;
+      }
+      i += 1;
+      out.push(`<pre><code>${escapeHtml(body.join("\n"))}</code></pre>`);
+      continue;
+    }
+
+    const h = /^(#{1,4})\s+(.*)$/.exec(line);
+    if (h) {
+      flushPara();
+      out.push(`<h${h[1].length}>${inlineMd(h[2])}</h${h[1].length}>`);
+      i += 1;
+      continue;
+    }
+
+    if (/^\s*(?:-{3,}|\*{3,})\s*$/.test(line)) {
+      flushPara();
+      out.push("<hr>");
+      i += 1;
+      continue;
+    }
+
+    if (/^\s*>\s?/.test(line)) {
+      flushPara();
+      const body = [];
+      while (i < lines.length && /^\s*>\s?/.test(lines[i])) {
+        body.push(lines[i].replace(/^\s*>\s?/, ""));
+        i += 1;
+      }
+      out.push(`<blockquote><p>${inlineMd(body.join(" "))}</p></blockquote>`);
+      continue;
+    }
+
+    const ul = /^\s*[-*]\s+(.*)$/.exec(line);
+    const ol = /^\s*\d+[.)]\s+(.*)$/.exec(line);
+    if (ul || ol) {
+      flushPara();
+      const tag = ul ? "ul" : "ol";
+      const items = [];
+      while (i < lines.length) {
+        const m = ul
+          ? /^\s*[-*]\s+(.*)$/.exec(lines[i])
+          : /^\s*\d+[.)]\s+(.*)$/.exec(lines[i]);
+        if (!m) {
+          if (!/^\s*$/.test(lines[i])) break; // liste bitti
+          i += 1; // boş satırı atla
+          continue;
+        }
+        items.push(`<li>${inlineMd(m[1])}</li>`);
+        i += 1;
+      }
+      out.push(`<${tag}>${items.join("")}</${tag}>`);
+      continue;
+    }
+
+    if (/^\s*$/.test(line)) {
+      flushPara();
+      i += 1;
+      continue;
+    }
+
+    para.push(line.trim());
+    i += 1;
+  }
+  flushPara();
+  return out.join("");
+}
+
+function renderLesson(card) {
+  lessonLabel.textContent = `${TYPE_LABELS[card.type]} · ${card.topic}`;
+  lessonBody.innerHTML = mdToHtml(card.detail);
+  lessonScroll.scrollTop = 0;
+}
+
+function openLesson() {
+  const card = state.queue[state.index];
+  if (!card || !card.detail) return;
+  renderLesson(card);
+  lessonScreen.classList.remove("hidden");
+  lessonClose.focus();
+}
+
+function closeLesson() {
+  lessonScreen.classList.add("hidden");
+}
+
+lessonOpen.addEventListener("click", openLesson);
+lessonClose.addEventListener("click", closeLesson);
 
 let toastEl = null;
 function toast(message) {
@@ -268,15 +420,30 @@ function startStudy() {
     .filter((c) => (c.topic || "(konusuz)") === state.topic && isDue(c))
     .sort((a, b) => millis(a.nextReview) - millis(b.nextReview));
   state.index = 0;
+  state.session = { unique: new Set(), again: 0 };
 
   if (state.queue.length === 0) {
-    showScreen("empty");
+    showEmpty("none");
     return;
   }
 
   deckName.textContent = `${TYPE_LABELS[state.type]} · ${state.topic}`;
   showScreen("study");
   renderCard();
+}
+
+function showEmpty(kind) {
+  if (kind === "done") {
+    const { unique, again } = state.session;
+    emptyTitle.textContent = "Seans tamamlandı.";
+    emptySub.textContent =
+      `${unique.size} kart çalıştın.` +
+      (again ? ` ${again} kez tekrar ettin.` : "");
+  } else {
+    emptyTitle.textContent = "Bu konuda hazır kart yok.";
+    emptySub.textContent = "Sırada bekleyen kart kalmadı.";
+  }
+  showScreen("empty");
 }
 
 function remaining() {
@@ -297,24 +464,52 @@ function hasChoices(s) {
   return /\n[A-E]\) /.test(s);
 }
 
+// çoktan seçmelide kök ve her şık ayrı blok; şık kayınca devamı kendi altında kalır
+function renderFront(text) {
+  if (!hasChoices(text)) {
+    frontText.textContent = text;
+    return;
+  }
+  const stem = [];
+  const options = [];
+  for (const line of text.split("\n")) {
+    if (/^[A-E]\) /.test(line)) options.push(line);
+    else if (options.length) options[options.length - 1] += " " + line;
+    else stem.push(line);
+  }
+  frontText.textContent = "";
+  if (stem.length) {
+    const el = document.createElement("span");
+    el.className = "q-stem";
+    el.textContent = stem.join(" ");
+    frontText.appendChild(el);
+  }
+  for (const line of options) {
+    const el = document.createElement("span");
+    el.className = "q-opt";
+    el.textContent = line;
+    frontText.appendChild(el);
+  }
+}
+
 function renderCard() {
   const card = state.queue[state.index];
   if (!card) {
-    showScreen("empty");
+    showEmpty("done");
     return;
   }
 
   const front = tidyFront(card.front);
   cardEl.classList.toggle("choices", hasChoices(front));
-  frontText.textContent = front;
+  renderFront(front);
   backText.textContent = "";
-  detailText.textContent = "";
-  detailBlock.open = false;
-  detailBlock.classList.add("hidden");
+  lessonOpen.classList.add("hidden");
+  closeLesson();
   cardBack.classList.add("hidden");
   cardEl.classList.remove("revealed");
   gradeButtons.classList.add("hidden");
   revealBtn.classList.remove("hidden");
+  stageEl.scrollTop = 0;
 
   dueCount.textContent = `${remaining()} kart`;
   progressBar.style.width = `${(state.index / state.queue.length) * 100}%`;
@@ -333,15 +528,24 @@ revealBtn.addEventListener("click", () => {
   const card = state.queue[state.index];
   if (!card) return;
   backText.textContent = collapseWs(card.back);
-  const detail = collapseWs(card.detail);
-  if (detail) {
-    detailText.textContent = detail;
-    detailBlock.classList.remove("hidden");
-  }
+  if (card.detail && card.detail.trim()) lessonOpen.classList.remove("hidden");
   cardBack.classList.remove("hidden");
   cardEl.classList.add("revealed");
   revealBtn.classList.add("hidden");
   gradeButtons.classList.remove("hidden");
+
+  // uzun kartta cevap ekranın altında kalmasın
+  requestAnimationFrame(() => {
+    const stageRect = stageEl.getBoundingClientRect();
+    const backRect = cardBack.getBoundingClientRect();
+    if (backRect.top <= stageRect.bottom - 80) return;
+    stageEl.scrollBy({
+      top: backRect.top - stageRect.top - stageRect.height * 0.2,
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  });
 });
 
 // ---- SM-2 ---------------------------------------------------
@@ -385,6 +589,8 @@ gradeButtons.addEventListener("click", (e) => {
   if (!card) return;
 
   const result = sm2(card, grade);
+  state.session.unique.add(card.id || card.front);
+  if (grade < 3) state.session.again += 1;
 
   // bellekteki kart nesnesini de güncelle — geri dönünce konu sayıları doğru olsun
   card.repetitions = result.repetitions;
@@ -408,9 +614,12 @@ gradeButtons.addEventListener("click", (e) => {
   }
 
   state.index += 1;
+  // "Tekrar" kartı aynı seansın sonuna ekle — bugün tekrar gelsin
+  if (grade < 3) state.queue.push(card);
+  closeLesson();
   if (remaining() <= 0) {
     progressBar.style.width = "100%";
-    showScreen("empty");
+    showEmpty("done");
   } else {
     renderCard();
   }
@@ -418,6 +627,13 @@ gradeButtons.addEventListener("click", (e) => {
 
 // klavye kısayolları: boşluk = göster, 1-4 = notla
 document.addEventListener("keydown", (e) => {
+  if (!lessonScreen.classList.contains("hidden")) {
+    if (e.code === "Escape" || e.code === "Enter") {
+      e.preventDefault();
+      closeLesson();
+    }
+    return;
+  }
   if (screens.study.classList.contains("hidden")) return;
   if (!revealBtn.classList.contains("hidden")) {
     if (e.code === "Space" || e.code === "Enter") {
@@ -467,6 +683,43 @@ function demoCards() {
       "Coğrafya",
       "Türkiye'de güneyden kuzeye gidildikçe aşağıdakilerden hangisi görülmez?\nA) Gölge boyunun uzaması\nB) Güneş ışınlarının düşme açısının azalması\nC) Çizgisel hızın azalması\nD) Denizlerin tuzluluğunun azalması\nE) Yağışların azalması",
       "Doğru cevap: E) Yağışların azalması",
+    ),
+    mk(
+      "yazilim",
+      "React",
+      "useEffect ne zaman ve nasıl çalışır?",
+      "Render tamamlandıktan sonra; bağımlılık dizisindeki değerler her değiştiğinde.",
+      `## useEffect nedir
+
+useEffect, React'in **yan etki (side effect)** kancasıdır. Komponentin render olduktan *sonra* yapması gereken işleri tanımlar: veri çekme, abonelik, DOM ölçümü, zamanlayıcılar...
+
+### Ne zaman çalışır?
+
+1. İlk mount sonrası — mutlaka bir kez
+2. Bağımlılık dizisindeki değerlerden biri değiştikten sonra
+3. Bir sonraki efektden önce ve unmount'ta temizlik (cleanup) çalışır
+
+## Temel örnek
+
+\`\`\`js
+useEffect(() => {
+  const id = setInterval(tik, 1000);
+  return () => clearInterval(id); // temizlik
+}, []); // boş dizi: sadece ilk montajda çalışır
+\`\`\`
+
+## Sık tuzağlar
+
+- **Eksik bağımlılık**: diziye koymadığın değer "bayat" (stale) kalır.
+- **Nesne/fonksiyon bağımlılığı**: her render'da yeni referans yaratır, efekt gereksiz çalışır — useMemo ile sabitle.
+- **Cleanup atlama**: return edilen temizliği yazmayınca abonelikler sızar.
+
+> Kural: efect içinde kullandığın her render zamanlı değeri bağımlılık dizisine yaz; gerçekten sadece bir kez okumak istiyorsan useRef ile sabitle.
+
+---
+
+Ayrıntılar için [React dokümantasyonu](https://react.dev/reference/react/useEffect) konusuna bakabilirsin.
+`,
     ),
   ];
 }

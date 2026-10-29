@@ -11,7 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
 
@@ -75,10 +75,9 @@
           </div>
           <div class="card-face card-back hidden">
             <p id="back-text"></p>
-            <details id="detail-block" class="card-detail">
-              <summary>Detaylı açıklama</summary>
-              <p id="detail-text"></p>
-            </details>
+            <button id="lesson-open" class="lesson-btn hidden" type="button">
+              <span class="lesson-btn-mark">+</span>Konu anlatımını oku
+            </button>
           </div>
         </div>
       </div>
@@ -96,16 +95,28 @@
     </footer>
   </section>
 
+  <!-- Konu anlatımı: kartın öğretici kaynağı, tam ekran okuma yüzü -->
+  <div id="lesson-screen" class="lesson hidden" role="dialog" aria-modal="true" aria-label="Konu anlatımı">
+    <header class="lesson-top">
+      <button id="lesson-close" class="link-back" type="button">← Karta dön</button>
+      <span id="lesson-label">Konu anlatımı</span>
+    </header>
+    <div class="lesson-scroll">
+      <article id="lesson-body" class="lesson-body"></article>
+    </div>
+    <p class="lesson-hint">Esc: kapat · boşluk: kaydır</p>
+  </div>
+
   <!-- Empty state -->
   <section id="empty-screen" class="screen hidden">
     <div class="empty-box">
       <p class="empty-mark">✓</p>
-      <p class="empty-title">Bu konuda hazır kart yok.</p>
-      <p class="empty-sub">Sırada bekleyen kart kalmadı.</p>
+      <p id="empty-title" class="empty-title">Bu konuda hazır kart yok.</p>
+      <p id="empty-sub" class="empty-sub">Sırada bekleyen kart kalmadı.</p>
       <button id="empty-back" class="reveal" type="button">Başka konu seç</button>
     </div>
   </section>
 
-  <script type="module" src="app.js?v=3"></script>
+  <script type="module" src="app.js?v=5"></script>
 </body>
 </html>

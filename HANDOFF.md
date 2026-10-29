@@ -75,7 +75,7 @@ Single collection: `cards`. One document per card, auto-generated ID.
 {
   front: string,          // question
   back: string,           // answer
-  detail: string,         // optional long explanation (shown collapsed after reveal; "" = hidden)
+  detail: string,         // optional teaching resource, Markdown (read full-screen via "Konu anlatımını oku"; "" = no button)
   type: "yazilim" | "kpss",  // required — chosen on the CLI, filtered in step 1
   topic: string,          // required — free-text konu, e.g. "React", "Anayasa"
   tags: string[],         // extra model-suggested tags + [type, topic] for search
@@ -153,7 +153,13 @@ text (plain cards stay centered serif). `collapseWs()` keeps the `back`
   `#back-text`) inside a `.deck` wrapper (stacked-card effect, `.last` class
   when 1 card remains); `#reveal-btn`; `#grade-buttons` (hidden until
   revealed) with 4 buttons `data-grade="0|3|4|5"` (Again/Hard/Good/Easy) and
-  `#good-interval` / `#easy-interval` spans for the interval preview. Step 3.
+  `#good-interval` / `#easy-interval` spans for the interval preview. When the
+  card has a `detail`, a `#lesson-open` button ("Konu anlatımını oku") appears
+  next to the back face after reveal; it opens `#lesson-screen`, a fixed
+  full-screen reader (paper page on the dark room) that renders `detail` as
+  Markdown (headings, lists, code blocks, quotes, links) via `mdToHtml()` in
+  app.js. `#lesson-close` or `Esc` returns to the card, grading state intact.
+  Step 3.
 - `#empty-screen` — shown when the chosen topic has no due cards; its
   `#empty-back` button returns to the topic list.
 
