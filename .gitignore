@@ -2,6 +2,10 @@
 .env
 serviceAccountKey.json
 
+# kart dökümü ve raporları — telifli soru içeriği taşır, repoya girmesin
+cards_export.json
+review_report.md
+
 # indirilen sınav materyalleri — telifli, repoya girmesin
 notes/
 *.pdf
