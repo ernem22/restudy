@@ -20,13 +20,26 @@ import {
   doc,
   updateDoc,
   Timestamp,
+  serverTimestamp,
+  deleteField,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const DEMO = new URLSearchParams(location.search).has("demo");
 
-const CARD_TYPES = ["yazilim", "kpss"];
-const TYPE_LABELS = { yazilim: "Yazılım", kpss: "KPSS" };
+// Alanlar: sources.json'daki `group` değerleri. Firestore'da kartın `type` alanı bu kimliği taşır.
+// "yazilim" eski (Gemini ile üretilmiş) kartlar için; kart yoksa ekranda görünmez.
+const GROUPS = [
+  { id: "frontend", label: "Frontend" },
+  { id: "backend", label: "Backend" },
+  { id: "db", label: "Veritabanı" },
+  { id: "devops", label: "DevOps" },
+  { id: "general", label: "Genel Programlama" },
+  { id: "ai", label: "Yapay Zekâ" },
+  { id: "yazilim", label: "Yazılım (eski)" },
+];
+const CARD_TYPES = GROUPS.map((g) => g.id);
+const TYPE_LABELS = Object.fromEntries(GROUPS.map((g) => [g.id, g.label]));
 
 // ---- boot -----------------------------------------------------------
 
@@ -41,7 +54,7 @@ if (!DEMO) {
 
 // tüm oturum durumu tek yerde
 const state = {
-  cardsByType: { yazilim: [], kpss: [] }, // türe göre bellekteki kartlar
+  cardsByType: Object.fromEntries(CARD_TYPES.map((t) => [t, []])), // alana göre bellekteki kartlar
   type: null,
   topic: null,
   queue: [], // seçili konunun hazır kartları
@@ -82,6 +95,7 @@ const cardEl = document.getElementById("card");
 const frontText = document.getElementById("front-text");
 const backText = document.getElementById("back-text");
 const lessonOpen = document.getElementById("lesson-open");
+const reportBtn = document.getElementById("report-btn");
 const lessonScreen = document.getElementById("lesson-screen");
 const lessonBody = document.getElementById("lesson-body");
 const lessonLabel = document.getElementById("lesson-label");
@@ -340,12 +354,25 @@ async function loadAllCards() {
 // ---- 1. adım: tür ---------------------------------------------
 
 function showTypeScreen() {
+  if (!typeList.querySelector("[data-type]")) {
+    for (const g of GROUPS) {
+      const btn = document.createElement("button");
+      btn.dataset.type = g.id;
+      btn.className = "type-card";
+      btn.innerHTML = '<span class="type-name"></span><span class="type-meta" data-count>—</span>';
+      btn.querySelector(".type-name").textContent = g.label;
+      typeList.appendChild(btn);
+    }
+  }
+  // kartı olmayan alanlar gizlenir; hiç kart yoksa hepsi "kart yok" olarak görünür
+  const any = CARD_TYPES.some((t) => (state.cardsByType[t] || []).length > 0);
   for (const btn of typeList.querySelectorAll("[data-type]")) {
     const cards = state.cardsByType[btn.dataset.type] || [];
     const due = cards.filter(isDue).length;
     const meta = btn.querySelector("[data-count]");
     meta.textContent = cards.length === 0 ? "kart yok" : `${due} kart hazır`;
     btn.classList.toggle("is-empty", cards.length === 0);
+    btn.classList.toggle("hidden", any && cards.length === 0);
   }
   showScreen("type");
 }
@@ -529,6 +556,7 @@ revealBtn.addEventListener("click", () => {
   if (!card) return;
   backText.textContent = collapseWs(card.back);
   if (card.detail && card.detail.trim()) lessonOpen.classList.remove("hidden");
+  renderReport(card);
   cardBack.classList.remove("hidden");
   cardEl.classList.add("revealed");
   revealBtn.classList.add("hidden");
@@ -578,6 +606,36 @@ function sm2(card, grade) {
     lastReviewed: new Date(),
   };
 }
+
+// ---- hatalı kart bildirimi -------------------------------------
+// Firestore'da kartın `reported` (bool) ve `reportedAt` (zaman) alanları. Kart silinmez/gizlenmez;
+// bildirilenler `python reported_cards.py` ile listelenip düzeltilir.
+
+function renderReport(card) {
+  const on = Boolean(card.reported);
+  reportBtn.classList.toggle("is-reported", on);
+  reportBtn.setAttribute("aria-pressed", String(on));
+  reportBtn.textContent = on ? "⚑ Bildirildi · geri al" : "⚑ Hatalı bildir";
+}
+
+reportBtn.addEventListener("click", () => {
+  const card = state.queue[state.index];
+  if (!card) return;
+  const next = !card.reported;
+  card.reported = next;
+  renderReport(card);
+  if (DEMO) return;
+  updateDoc(
+    doc(db, "cards", card.id),
+    next ? { reported: true, reportedAt: serverTimestamp() } : { reported: false, reportedAt: deleteField() },
+  ).catch((err) => {
+    console.error("bildirim kaydedilemedi:", err);
+    card.reported = !next; // geri al
+    renderReport(card);
+    toast("Bildirim kaydedilemedi.");
+  });
+  toast(next ? "Hatalı olarak işaretlendi." : "İşaret kaldırıldı.");
+});
 
 // ---- notlama ----------------------------------------------
 
@@ -667,25 +725,15 @@ function demoCards() {
     ...base,
   });
   return [
-    mk("yazilim", "SM-2", "SM-2'de easeFactor'ün alt sınırı kaçtır?", "1.3"),
-    mk("yazilim", "SM-2", "Bir kartı ilk kez doğru bildiğinde interval kaç gün olur?", "1 gün"),
-    mk("yazilim", "SM-2", "repetitions = 1 iken doğru cevapta interval kaça çıkar?", "6 gün"),
-    mk("yazilim", "SM-2", '"Tekrar" (grade 0) verince repetitions ne olur?', "0'a sıfırlanır, interval 1 güne düşer."),
-    mk("yazilim", "React", "useEffect'in bağımlılık dizisi boşsa etki ne zaman çalışır?", "Sadece ilk render'dan sonra bir kez."),
-    mk("yazilim", "React", "React'te key prop ne işe yarar?", "Liste elemanlarını render'lar arası eşleştirip gereksiz yeniden oluşturmayı önler.",
+    mk("general", "SM-2", "SM-2'de easeFactor'ün alt sınırı kaçtır?", "1.3"),
+    mk("general", "SM-2", "Bir kartı ilk kez doğru bildiğinde interval kaç gün olur?", "1 gün"),
+    mk("general", "SM-2", "repetitions = 1 iken doğru cevapta interval kaça çıkar?", "6 gün"),
+    mk("general", "SM-2", '"Tekrar" (grade 0) verince repetitions ne olur?', "0'a sıfırlanır, interval 1 güne düşer."),
+    mk("frontend", "React", "useEffect'in bağımlılık dizisi boşsa etki ne zaman çalışır?", "Sadece ilk render'dan sonra bir kez."),
+    mk("frontend", "React", "React'te key prop ne işe yarar?", "Liste elemanlarını render'lar arası eşleştirip gereksiz yeniden oluşturmayı önler.",
       "React varsayılan olarak elemanları sıraya göre eşleştirir; listenin başına eleman eklenince tüm alt ağaç gereksiz güncellenir. Stabil bir key (veritabanı id'si) verirsen React elemanları taşır, sadece değişen yer güncellenir."),
-    mk("kpss", "Anayasa Hukuku", "1982 Anayasası'na göre egemenlik kime aittir?", "Kayıtsız şartsız millete."),
-    mk("kpss", "Anayasa Hukuku", "TBMM üye tam sayısı kaçtır?", "600"),
-    mk("kpss", "Anayasa Hukuku", "Anayasa Mahkemesi kaç üyeden oluşur?", "15"),
-    mk("kpss", "Coğrafya", "Türkiye'nin en yüksek dağı hangisidir?", "Ağrı Dağı (5.137 m)."),
     mk(
-      "kpss",
-      "Coğrafya",
-      "Türkiye'de güneyden kuzeye gidildikçe aşağıdakilerden hangisi görülmez?\nA) Gölge boyunun uzaması\nB) Güneş ışınlarının düşme açısının azalması\nC) Çizgisel hızın azalması\nD) Denizlerin tuzluluğunun azalması\nE) Yağışların azalması",
-      "Doğru cevap: E) Yağışların azalması",
-    ),
-    mk(
-      "yazilim",
+      "frontend",
       "React",
       "useEffect ne zaman ve nasıl çalışır?",
       "Render tamamlandıktan sonra; bağımlılık dizisindeki değerler her değiştiğinde.",

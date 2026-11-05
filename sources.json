@@ -1,0 +1,1299 @@
+[
+  {
+    "topic": "html",
+    "group": "frontend",
+    "repo": "mdn/content",
+    "paths": [
+      "files/en-us/web/html"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE.md: CC-BY-SA/CC-BY",
+    "site": "https://developer.mozilla.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 288,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "css",
+    "group": "frontend",
+    "repo": "mdn/content",
+    "paths": [
+      "files/en-us/web/css"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE.md: CC-BY-SA/CC-BY",
+    "site": "https://developer.mozilla.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1569,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "javascript",
+    "group": "frontend",
+    "repo": "mdn/content",
+    "paths": [
+      "files/en-us/web/javascript"
+    ],
+    "format": ".md, .svg",
+    "license": "LICENSE.md: CC-BY-SA/CC-BY",
+    "site": "https://developer.mozilla.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1361,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "web-api",
+    "group": "frontend",
+    "repo": "mdn/content",
+    "paths": [
+      "files/en-us/web/api"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE.md: CC-BY-SA/CC-BY",
+    "site": "https://developer.mozilla.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 8430,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "http",
+    "group": "frontend",
+    "repo": "mdn/content",
+    "paths": [
+      "files/en-us/web/http"
+    ],
+    "format": ".md, .svg",
+    "license": "LICENSE.md: CC-BY-SA/CC-BY",
+    "site": "https://developer.mozilla.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 389,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "javascript-info",
+    "group": "frontend",
+    "repo": "javascript-tutorial/en.javascript.info",
+    "paths": [
+      "1-js",
+      "2-ui"
+    ],
+    "format": ".md, .svg",
+    "license": "CC-BY-NC benzeri özel; başka kullanım için yazardan izin",
+    "site": "https://javascript.info",
+    "last_commit": "2026-07-25",
+    "files_in_path": 1139,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (01-js yok, 1-js).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "typescript",
+    "group": "frontend",
+    "repo": "microsoft/TypeScript-Website",
+    "paths": [
+      "packages/documentation/copy/en"
+    ],
+    "format": ".md, .svg",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://www.typescriptlang.org",
+    "last_commit": "2026-10-28",
+    "files_in_path": 142,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "react",
+    "group": "frontend",
+    "repo": "reactjs/react.dev",
+    "paths": [
+      "src/content"
+    ],
+    "format": ".md",
+    "license": "LICENSE-DOCS.md: CC-BY",
+    "site": "https://react.dev",
+    "last_commit": "2026-10-27",
+    "files_in_path": 226,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "nextjs",
+    "group": "frontend",
+    "repo": "vercel/next.js",
+    "paths": [
+      "docs"
+    ],
+    "format": ".mdx",
+    "license": "license.md: MIT",
+    "site": "https://nextjs.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 477,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "vue",
+    "group": "frontend",
+    "repo": "vuejs/docs",
+    "paths": [
+      "src"
+    ],
+    "format": "md (+ örnek js/vue dosyaları; sadece .md al)",
+    "license": "LICENSE: CC-BY",
+    "site": "https://vuejs.org",
+    "last_commit": "2026-09-15",
+    "files_in_path": 553,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "angular",
+    "group": "frontend",
+    "repo": "angular/angular",
+    "paths": [
+      "adev/src/content"
+    ],
+    "format": "md (+ ts/html örnek; sadece .md al)",
+    "license": "LICENSE: MIT",
+    "site": "https://angular.dev",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1773,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "svelte",
+    "group": "frontend",
+    "repo": "sveltejs/svelte",
+    "paths": [
+      "documentation/docs"
+    ],
+    "format": ".md",
+    "license": "LICENSE.md: MIT",
+    "site": "https://svelte.dev",
+    "last_commit": "2026-11-03",
+    "files_in_path": 106,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "react-native",
+    "group": "frontend",
+    "repo": "facebook/react-native-website",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .mdx",
+    "license": "LICENSE: MIT; LICENSE-docs: CC-BY",
+    "site": "https://reactnative.dev",
+    "last_commit": "2026-10-30",
+    "files_in_path": 239,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "redux",
+    "group": "frontend",
+    "repo": "reduxjs/redux",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .mdx",
+    "license": "LICENSE-logo.md: CC0/Unlicense; LICENSE.md: MIT",
+    "site": "https://redux.js.org",
+    "last_commit": "2026-10-20",
+    "files_in_path": 91,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "tanstack-query",
+    "group": "frontend",
+    "repo": "TanStack/query",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .json",
+    "license": "LICENSE: MIT",
+    "site": "https://tanstack.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1669,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "vite",
+    "group": "frontend",
+    "repo": "vitejs/vite",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .webp",
+    "license": "LICENSE: MIT",
+    "site": "https://vite.dev",
+    "last_commit": "2026-11-02",
+    "files_in_path": 147,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "jest",
+    "group": "frontend",
+    "repo": "jestjs/jest",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md",
+    "license": "LICENSE: MIT",
+    "site": "https://jestjs.io",
+    "last_commit": "2026-11-02",
+    "files_in_path": 38,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "vitest",
+    "group": "frontend",
+    "repo": "vitest-dev/vitest",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: MIT",
+    "site": "https://vitest.dev",
+    "last_commit": "2026-11-03",
+    "files_in_path": 378,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "playwright",
+    "group": "frontend",
+    "repo": "microsoft/playwright",
+    "paths": [
+      "docs/src"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://playwright.dev",
+    "last_commit": "2026-11-02",
+    "files_in_path": 235,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "web-dev",
+    "group": "frontend",
+    "repo": "GoogleChrome/web.dev",
+    "paths": [
+      "src/site/content/en"
+    ],
+    "format": ".md, .yml",
+    "license": "LICENSE: CC-BY",
+    "site": "https://web.dev",
+    "last_commit": "2023-10-29",
+    "files_in_path": 1892,
+    "status": "stale",
+    "include": false,
+    "notes": "Son commit 2023-10: bırakılmış. İçerik developer.chrome.com'a taşınmış olabilir; atla.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "tailwind",
+    "group": "frontend",
+    "repo": "tailwindlabs/tailwindcss.com",
+    "paths": [
+      "src/docs"
+    ],
+    "format": ".mdx, .svg",
+    "license": "MIT",
+    "site": "https://tailwindcss.com",
+    "last_commit": "2026-09-09",
+    "files_in_path": 237,
+    "status": "ok",
+    "include": true,
+    "notes": "Repoda lisans dosyası yok; kişisel kullanım için sorun değil ama lisans belirsiz.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "csharp",
+    "group": "backend",
+    "repo": "dotnet/docs",
+    "paths": [
+      "docs/csharp"
+    ],
+    "format": ".md, .cs",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://learn.microsoft.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1992,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "dotnet",
+    "group": "backend",
+    "repo": "dotnet/docs",
+    "paths": [
+      "docs/core",
+      "docs/standard",
+      "docs/fundamentals"
+    ],
+    "format": ".md, .cs",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://learn.microsoft.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 6056,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "aspnet-core",
+    "group": "backend",
+    "repo": "dotnet/AspNetCore.Docs",
+    "paths": [
+      "aspnetcore"
+    ],
+    "format": ".cs, .cshtml",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://learn.microsoft.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 19187,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "efcore",
+    "group": "backend",
+    "repo": "dotnet/EntityFramework.Docs",
+    "paths": [
+      "entity-framework/core"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://learn.microsoft.com",
+    "last_commit": "2026-10-27",
+    "files_in_path": 233,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (efcore yok).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "java",
+    "group": "backend",
+    "repo": "java/devjava-content",
+    "paths": [
+      "app/pages/learn"
+    ],
+    "format": ".md",
+    "license": "UNVERIFIED",
+    "site": "https://dev.java",
+    "last_commit": "2025-10-24",
+    "files_in_path": 290,
+    "status": "ok",
+    "include": true,
+    "notes": "dev.java/learn öğreticisi: app/pages/learn altında ~35 .md makale (temeller, diziler, enum, reflection, MethodHandle, modern IO, virtual threads, JavaFX). Koleksiyonlar/generics/stream/eşzamanlılık gibi konular bu repoda yok.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "spring-framework",
+    "group": "backend",
+    "repo": "spring-projects/spring-framework",
+    "paths": [
+      "framework-docs/modules/ROOT/pages"
+    ],
+    "format": "adoc (Antora)",
+    "license": "LICENSE.txt: Apache-2.0",
+    "site": "https://docs.spring.io",
+    "last_commit": "2026-11-03",
+    "files_in_path": 464,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (src/docs/asciidoc yok).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "spring-boot",
+    "group": "backend",
+    "repo": "spring-projects/spring-boot",
+    "paths": [
+      "documentation/spring-boot-docs/src/docs"
+    ],
+    "format": "adoc (Antora)",
+    "license": "LICENSE.txt: Apache-2.0",
+    "site": "https://docs.spring.io",
+    "last_commit": "2026-11-03",
+    "files_in_path": 166,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (spring-boot-project/... yok). Antora yapısı.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "spring-security",
+    "group": "backend",
+    "repo": "spring-projects/spring-security",
+    "paths": [
+      "docs/modules/ROOT/pages"
+    ],
+    "format": ".adoc",
+    "license": "LICENSE.txt: Apache-2.0",
+    "site": "https://docs.spring.io",
+    "last_commit": "2026-11-03",
+    "files_in_path": 191,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "spring-data-commons",
+    "group": "backend",
+    "repo": "spring-projects/spring-data-commons",
+    "paths": [
+      "src/main/antora/modules/ROOT/pages"
+    ],
+    "format": ".adoc",
+    "license": "LICENSE.txt: Apache-2.0",
+    "site": "https://docs.spring.io",
+    "last_commit": "2026-10-29",
+    "files_in_path": 41,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "hibernate-orm",
+    "group": "backend",
+    "repo": "hibernate/hibernate-orm",
+    "paths": [
+      "documentation/src/main/asciidoc"
+    ],
+    "format": ".sql, .adoc",
+    "license": "LICENSE.txt: Apache-2.0",
+    "site": "https://hibernate.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 427,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "nodejs",
+    "group": "backend",
+    "repo": "nodejs/node",
+    "paths": [
+      "doc/api"
+    ],
+    "format": ".md",
+    "license": "LICENSE: MIT",
+    "site": "https://nodejs.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 70,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "express",
+    "group": "backend",
+    "repo": "expressjs/expressjs.com",
+    "paths": [
+      "docs"
+    ],
+    "format": "md",
+    "license": "LICENSE.md: CC-BY",
+    "site": "https://expressjs.com",
+    "last_commit": "2026-10-31",
+    "files_in_path": 0,
+    "status": "needs_check",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (_pages/en yok). docs/ altında sadece 5 md var; içerik başka yerde olabilir.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "nestjs",
+    "group": "backend",
+    "repo": "nestjs/docs.nestjs.com",
+    "paths": [
+      "content"
+    ],
+    "format": ".md, .json",
+    "license": "LICENSE: MIT",
+    "site": "https://docs.nestjs.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 151,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "python",
+    "group": "backend",
+    "repo": "python/cpython",
+    "paths": [
+      "Doc"
+    ],
+    "format": ".rst, .py",
+    "license": "LICENSE: PSF",
+    "site": "https://docs.python.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 670,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "django",
+    "group": "backend",
+    "repo": "django/django",
+    "paths": [
+      "docs"
+    ],
+    "format": ".txt, .png",
+    "license": "LICENSE: BSD; LICENSE.python: PSF",
+    "site": "https://docs.djangoproject.com",
+    "last_commit": "2026-11-02",
+    "files_in_path": 731,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "fastapi",
+    "group": "backend",
+    "repo": "fastapi/fastapi",
+    "paths": [
+      "docs/en/docs"
+    ],
+    "format": ".png, .md",
+    "license": "LICENSE: MIT",
+    "site": "https://fastapi.tiangolo.com",
+    "last_commit": "2026-11-02",
+    "files_in_path": 407,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "go",
+    "group": "backend",
+    "repo": "golang/website",
+    "paths": [
+      "_content/doc"
+    ],
+    "format": ".md, .go",
+    "license": "LICENSE: BSD",
+    "site": "https://go.dev",
+    "last_commit": "2026-10-26",
+    "files_in_path": 284,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (_content/en/doc yok). Sadece 94 md.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "kotlin",
+    "group": "backend",
+    "repo": "JetBrains/kotlin-web-site",
+    "paths": [
+      "docs/topics"
+    ],
+    "format": ".md, .topic",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://kotlinlang.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 309,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "rust-book",
+    "group": "backend",
+    "repo": "rust-lang/book",
+    "paths": [
+      "src"
+    ],
+    "format": ".md, .svg",
+    "license": "MIT / Apache-2.0",
+    "site": "https://doc.rust-lang.org",
+    "last_commit": "2026-10-28",
+    "files_in_path": 140,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity'nin CC-BY-NC-SA iddiası yanlış; repoda sadece MIT ve Apache dosyaları var.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "ms-api-guidelines",
+    "group": "backend",
+    "repo": "microsoft/api-guidelines",
+    "paths": [
+      "azure",
+      "graph"
+    ],
+    "format": ".md, .json",
+    "license": "license.txt: CC-BY",
+    "site": "https://microsoft.github.io",
+    "last_commit": "2026-10-30",
+    "files_in_path": 36,
+    "status": "ok",
+    "include": true,
+    "notes": "vNext yok; Guidelines.md kökte ayrıca var.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "google-aip",
+    "group": "backend",
+    "repo": "aip-dev/google.aip.dev",
+    "paths": [
+      "aip"
+    ],
+    "format": ".md, .yaml",
+    "license": "LICENSE.md: CC-BY",
+    "site": "https://google.aip.dev",
+    "last_commit": "2026-10-15",
+    "files_in_path": 125,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "graphql",
+    "group": "backend",
+    "repo": "graphql/graphql.github.io",
+    "paths": [
+      "src/pages"
+    ],
+    "format": "mdx/md",
+    "license": "LICENSE: MIT",
+    "site": "https://graphql.org",
+    "last_commit": "2026-11-02",
+    "files_in_path": 272,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (site/content yok).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "grpc",
+    "group": "backend",
+    "repo": "grpc/grpc.io",
+    "paths": [
+      "content/en/docs"
+    ],
+    "format": ".md",
+    "license": "LICENSE: CC-BY/Apache-2.0",
+    "site": "https://grpc.io",
+    "last_commit": "2026-10-28",
+    "files_in_path": 110,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "owasp-cheatsheets",
+    "group": "backend",
+    "repo": "OWASP/CheatSheetSeries",
+    "paths": [
+      "cheatsheets"
+    ],
+    "format": ".md",
+    "license": "LICENSE.md: CC-BY-SA/CC-BY",
+    "site": "https://cheatsheetseries.owasp.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 137,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "owasp-top10",
+    "group": "backend",
+    "repo": "OWASP/Top10",
+    "paths": [
+      "2025"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: CC-BY-SA/CC-BY",
+    "site": "https://owasp.org",
+    "last_commit": "2026-09-24",
+    "files_in_path": 471,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "postgres",
+    "group": "db",
+    "repo": "postgres/postgres",
+    "paths": [
+      "doc/src/sgml"
+    ],
+    "format": "sgml (DocBook)",
+    "license": "PostgreSQL License",
+    "site": "https://www.postgresql.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 482,
+    "status": "ok",
+    "include": true,
+    "notes": "Markdown yok. Resmi HTML'i (postgresql.org/docs/current) çekmek daha pratik.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "sql-server",
+    "group": "db",
+    "repo": "MicrosoftDocs/sql-docs",
+    "paths": [
+      "docs/t-sql"
+    ],
+    "format": ".md, .sql",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://learn.microsoft.com",
+    "last_commit": "2026-11-02",
+    "files_in_path": 1232,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "mongodb",
+    "group": "db",
+    "repo": "mongodb/docs",
+    "paths": [
+      "content/manual"
+    ],
+    "format": "rst",
+    "license": "UNVERIFIED",
+    "site": "https://www.mongodb.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 104615,
+    "status": "ok",
+    "include": true,
+    "notes": "Çok büyük (26k dosya, çoğu snippet/yaml). Filtre şart.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "redis",
+    "group": "db",
+    "repo": "redis/docs",
+    "paths": [
+      "content/develop",
+      "content/commands"
+    ],
+    "format": ".md, .java",
+    "license": "CC-BY-NC-SA-4.0 (bir kısmı CC-BY-SA-4.0)",
+    "site": "https://redis.io",
+    "last_commit": "2026-11-03",
+    "files_in_path": 7408,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (docs yok, content var). Kişisel kullanım uygun.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "kafka-docs",
+    "group": "db",
+    "repo": "apache/kafka",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: Apache-2.0; LICENSE-binary: Apache-2.0; licenses: ?",
+    "site": "https://kafka.apache.org",
+    "last_commit": "2026-11-03",
+    "files_in_path": 168,
+    "status": "ok",
+    "include": true,
+    "notes": "Tercih edilen kaynak (apache/kafka docs, 112 md).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "kafka-site",
+    "group": "db",
+    "repo": "apache/kafka-site",
+    "paths": [
+      "content"
+    ],
+    "format": ".md, .html",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://kafka.apache.org",
+    "last_commit": "2026-10-28",
+    "files_in_path": 2988,
+    "status": "ok",
+    "include": false,
+    "notes": "Perplexity'nin önerdiği repo; kafka-docs varken gereksiz, sürüm kopyaları içerebilir.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "rabbitmq",
+    "group": "db",
+    "repo": "rabbitmq/rabbitmq-website",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE-Apache-2.0: Apache-2.0; LICENSE-MPL-2.0: ?",
+    "site": "https://www.rabbitmq.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 227,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "docker",
+    "group": "devops",
+    "repo": "docker/docs",
+    "paths": [
+      "content"
+    ],
+    "format": ".md, .webp",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://docs.docker.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1328,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "kubernetes",
+    "group": "devops",
+    "repo": "kubernetes/website",
+    "paths": [
+      "content/en/docs"
+    ],
+    "format": ".md, .svg",
+    "license": "LICENSE: CC-BY",
+    "site": "https://kubernetes.io",
+    "last_commit": "2026-11-03",
+    "files_in_path": 1790,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "github-actions",
+    "group": "devops",
+    "repo": "github/docs",
+    "paths": [
+      "content/actions"
+    ],
+    "format": ".md",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://docs.github.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 251,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "opentelemetry",
+    "group": "devops",
+    "repo": "open-telemetry/opentelemetry.io",
+    "paths": [
+      "content/en/docs"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: Apache-2.0",
+    "site": "https://opentelemetry.io",
+    "last_commit": "2026-11-03",
+    "files_in_path": 501,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "prometheus",
+    "group": "devops",
+    "repo": "prometheus/docs",
+    "paths": [
+      "docs"
+    ],
+    "format": ".md",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://prometheus.io",
+    "last_commit": "2026-10-30",
+    "files_in_path": 70,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "terraform",
+    "group": "devops",
+    "repo": "hashicorp/web-unified-docs",
+    "paths": [
+      "content/terraform"
+    ],
+    "format": ".mdx, .png",
+    "license": "BUSL-1.1 (IBM)",
+    "site": "https://developer.hashicorp.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 5916,
+    "status": "ok",
+    "include": true,
+    "notes": "Repo lisansı Business Source License. Sadece kişisel çalışma için kullan, dağıtma.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "azure",
+    "group": "devops",
+    "repo": "MicrosoftDocs/azure-docs",
+    "paths": [
+      "articles"
+    ],
+    "format": ".png, .md",
+    "license": "LICENSE: CC-BY; LICENSE-CODE: MIT",
+    "site": "https://learn.microsoft.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 52010,
+    "status": "ok",
+    "include": true,
+    "notes": "15k md, çok büyük. Servis klasörüne göre filtrele (örn. articles/app-service).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "cp-algorithms",
+    "group": "general",
+    "repo": "cp-algorithms/cp-algorithms",
+    "paths": [
+      "src"
+    ],
+    "format": ".md, .png",
+    "license": "LICENSE: CC-BY-SA/CC-BY",
+    "site": "https://cp-algorithms.com",
+    "last_commit": "2026-10-26",
+    "files_in_path": 257,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "erickson-algorithms",
+    "group": "general",
+    "repo": "jeffgerickson/algorithms",
+    "paths": [
+      "Chapters"
+    ],
+    "format": "LaTeX/PDF (Chapters/)",
+    "license": "CC-BY-4.0",
+    "site": "https://jeffe.cs.illinois.edu",
+    "last_commit": "2019-07-01",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "open-data-structures",
+    "group": "general",
+    "repo": "patmorin/ods",
+    "paths": [
+      "latex"
+    ],
+    "format": "LaTeX",
+    "license": "CC-BY",
+    "site": "https://opendatastructures.org",
+    "last_commit": "2019-12-08",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "networking-systems-approach",
+    "group": "general",
+    "repo": "SystemsApproach/book",
+    "paths": [
+      "."
+    ],
+    "format": "rst (AsciiDoc değil)",
+    "license": "LICENSE: CC-BY",
+    "site": "https://book.systemsapproach.org",
+    "last_commit": "2026-10-20",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "book/ yok; bölümler kökte .rst (80 dosya).",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "design-patterns-humans",
+    "group": "general",
+    "repo": "kamranahmedse/design-patterns-for-humans",
+    "paths": [
+      "readme.md"
+    ],
+    "format": "md",
+    "license": "CC-BY-4.0",
+    "site": "https://github.com",
+    "last_commit": "2024-12-02",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "java-design-patterns",
+    "group": "general",
+    "repo": "iluwatar/java-design-patterns",
+    "paths": [
+      "<modül>/README.md"
+    ],
+    "format": "md",
+    "license": "LICENSE.md: MIT",
+    "site": "https://java-design-patterns.com",
+    "last_commit": "2026-09-13",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "Her pattern kendi klasöründe README.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "system-design-primer",
+    "group": "general",
+    "repo": "donnemartin/system-design-primer",
+    "paths": [
+      "README.md",
+      "solutions"
+    ],
+    "format": "?",
+    "license": "CC-BY-4.0 (repo LICENSE.txt)",
+    "site": "https://github.com",
+    "last_commit": "2026-03-19",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "pro-git",
+    "group": "general",
+    "repo": "progit/progit2",
+    "paths": [
+      "book"
+    ],
+    "format": ".asc, .png",
+    "license": "LICENSE.asc: CC-BY-NC-SA/CC-BY-SA/CC-BY",
+    "site": "https://git-scm.com",
+    "last_commit": "2026-05-25",
+    "files_in_path": 154,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "tldr",
+    "group": "general",
+    "repo": "tldr-pages/tldr",
+    "paths": [
+      "pages"
+    ],
+    "format": ".md, (none)",
+    "license": "LICENSE.md: CC-BY/MIT",
+    "site": "https://tldr.sh",
+    "last_commit": "2026-11-03",
+    "files_in_path": 7609,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "missing-semester",
+    "group": "general",
+    "repo": "missing-semester/missing-semester",
+    "paths": [
+      "_2020",
+      "_2026"
+    ],
+    "format": ".md, .txt",
+    "license": "CC-BY-NC-SA-4.0",
+    "site": "https://missing.csail.mit.edu",
+    "last_commit": "2026-10-08",
+    "files_in_path": 25,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "eng-practices",
+    "group": "general",
+    "repo": "google/eng-practices",
+    "paths": [
+      "review"
+    ],
+    "format": ".md",
+    "license": "CC-BY-3.0",
+    "site": "https://google.github.io",
+    "last_commit": "2024-09-18",
+    "files_in_path": 13,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "developer-roadmap",
+    "group": "general",
+    "repo": "kamranahmedse/developer-roadmap",
+    "paths": [
+      "roadmaps"
+    ],
+    "format": "md",
+    "license": "Özel: sadece kişisel kullanım, yayın/dağıtım yasak",
+    "site": "https://roadmap.sh",
+    "last_commit": "2026-11-03",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "Perplexity yolu yanlış (src/data/roadmaps yok); roadmaps/ altında ~11.3k md düğüm.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "mcp",
+    "group": "ai",
+    "repo": "modelcontextprotocol/modelcontextprotocol",
+    "paths": [
+      "docs"
+    ],
+    "format": ".mdx, .png",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://modelcontextprotocol.io",
+    "last_commit": "2026-11-02",
+    "files_in_path": 457,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "huggingface-transformers",
+    "group": "ai",
+    "repo": "huggingface/transformers",
+    "paths": [
+      "docs/source/en"
+    ],
+    "format": ".md, .yml",
+    "license": "LICENSE: Apache-2.0",
+    "site": "https://huggingface.co",
+    "last_commit": "2026-11-03",
+    "files_in_path": 777,
+    "status": "ok",
+    "include": true,
+    "notes": "",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "langchain",
+    "group": "ai",
+    "repo": "langchain-ai/docs",
+    "paths": [
+      "src"
+    ],
+    "format": "mdx",
+    "license": "MIT",
+    "site": "https://python.langchain.com",
+    "last_commit": "2026-11-03",
+    "files_in_path": 0,
+    "status": "ok",
+    "include": true,
+    "notes": "Docs ayrı repoya taşınmış (langchain-ai/docs). Ana repoda docs/ yok.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  },
+  {
+    "topic": "anthropic-cookbook",
+    "group": "ai",
+    "repo": "anthropics/anthropic-cookbook",
+    "paths": [],
+    "format": "ipynb/md",
+    "license": "LICENSE: MIT",
+    "site": "https://docs.claude.com",
+    "last_commit": "2026-11-02",
+    "files_in_path": 0,
+    "status": "root",
+    "include": true,
+    "notes": "Resmi Claude docs repo'su yok; docs.claude.com siteden/llms.txt ile çekilir.",
+    "llms_txt": "UNVERIFIED (sandbox sadece GitHub'a erişiyor)"
+  }
+]

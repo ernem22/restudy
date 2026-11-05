@@ -11,7 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=8" />
 </head>
 <body>
 
@@ -31,29 +31,20 @@
   <section id="type-screen" class="screen hidden">
     <div class="picker">
       <p class="picker-step">1 / 3</p>
-      <h2 class="picker-title">Tür seç</h2>
-      <div id="type-list" class="type-list">
-        <button data-type="yazilim" class="type-card">
-          <span class="type-name">Yazılım</span>
-          <span class="type-meta" data-count>—</span>
-        </button>
-        <button data-type="kpss" class="type-card">
-          <span class="type-name">KPSS</span>
-          <span class="type-meta" data-count>—</span>
-        </button>
-      </div>
+      <h2 class="picker-title">Alan seç</h2>
+      <div id="type-list" class="type-list"></div>
     </div>
   </section>
 
   <!-- Step 2: pick topic -->
   <section id="topic-screen" class="screen hidden">
     <div class="picker">
-      <button id="topic-back" class="link-back" type="button">← Tür</button>
+      <button id="topic-back" class="link-back" type="button">← Alan</button>
       <p class="picker-step">2 / 3</p>
       <h2 class="picker-title">Konu seç</h2>
       <p id="topic-type-label" class="picker-sub">—</p>
       <div id="topic-list" class="topic-list"></div>
-      <p id="topic-empty" class="picker-note hidden">Bu türde hiç kart yok.</p>
+      <p id="topic-empty" class="picker-note hidden">Bu alanda hiç kart yok.</p>
     </div>
   </section>
 
@@ -78,6 +69,7 @@
             <button id="lesson-open" class="lesson-btn hidden" type="button">
               <span class="lesson-btn-mark">+</span>Konu anlatımını oku
             </button>
+            <button id="report-btn" class="report-btn" type="button" aria-pressed="false">⚑ Hatalı bildir</button>
           </div>
         </div>
       </div>
@@ -117,6 +109,6 @@
     </div>
   </section>
 
-  <script type="module" src="app.js?v=5"></script>
+  <script type="module" src="app.js?v=7"></script>
 </body>
 </html>
