@@ -11,7 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="style.css?v=9" />
 </head>
 <body>
 
@@ -45,6 +45,17 @@
       <p id="topic-type-label" class="picker-sub">—</p>
       <div id="topic-list" class="topic-list"></div>
       <p id="topic-empty" class="picker-note hidden">Bu alanda hiç kart yok.</p>
+      <button id="skipped-open" class="skipped-link hidden" type="button"></button>
+    </div>
+  </section>
+
+  <!-- Sorulmayacak sorular -->
+  <section id="skipped-screen" class="screen hidden">
+    <div class="picker">
+      <button id="skipped-back" class="link-back" type="button">← Konular</button>
+      <h2 class="picker-title">Sorulmayacak sorular</h2>
+      <p id="skipped-sub" class="picker-sub">—</p>
+      <div id="skipped-list" class="skipped-list"></div>
     </div>
   </section>
 
@@ -69,7 +80,10 @@
             <button id="lesson-open" class="lesson-btn hidden" type="button">
               <span class="lesson-btn-mark">+</span>Konu anlatımını oku
             </button>
-            <button id="report-btn" class="report-btn" type="button" aria-pressed="false">⚑ Hatalı bildir</button>
+            <div class="card-tools">
+              <button id="report-btn" class="tool-btn" type="button" aria-pressed="false">⚑ Hatalı bildir</button>
+              <button id="skip-btn" class="tool-btn" type="button">⊘ Bu soruyu sorma</button>
+            </div>
           </div>
         </div>
       </div>
@@ -109,6 +123,6 @@
     </div>
   </section>
 
-  <script type="module" src="app.js?v=7"></script>
+  <script type="module" src="app.js?v=8"></script>
 </body>
 </html>
