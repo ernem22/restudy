@@ -23,7 +23,7 @@
   --on-paper: #2b2a26;
   --on-paper-soft: #5c554a;
   --on-ink-soft: #8a95a1;
-  --on-ink-faint: #5d6874;
+  --on-ink-faint: #8090a0; /* koyu zeminde ~4,8:1 (eskisi #5d6874 ≈ 2,7:1 idi) */
 
   --serif: "Newsreader", Georgia, "Source Serif Pro", serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -458,32 +458,42 @@ button {
 */
 
 .lesson-btn {
-  display: inline-flex;
+  /* blok düzey + fit-content: auto kenar boşlukları ancak böyle ortalar (inline-flex ortalamaz) */
+  display: flex;
+  width: fit-content;
   align-items: center;
-  gap: 8px;
-  margin: 0.25rem auto 0;
-  padding: 10px 18px;
-  border: 1px solid var(--paper-edge);
+  justify-content: center;
+  gap: 10px;
+  margin: 1.1rem auto 0;
+  min-height: 44px; /* dokunma hedefi */
+  padding: 10px 22px;
+  border: 1.5px solid var(--amber-deep);
   border-radius: 999px;
-  background: transparent;
-  font-size: 0.88rem;
+  background: var(--amber-ghost);
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--amber-deep);
+  color: #7a4e17; /* kağıt üzerinde ~6,6:1 */
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.lesson-btn:active {
+  transform: scale(0.97);
 }
 
 .lesson-btn .lesson-btn-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.35em;
-  height: 1.35em;
+  width: 1.6em;
+  height: 1.6em;
   border-radius: 999px;
-  background: var(--amber);
-  color: #1c1206;
+  background: var(--amber-deep);
+  color: #fff;
+  font-size: 0.9em;
   font-weight: 700;
+  line-height: 1;
 }
 
 .lesson-btn:hover,
@@ -491,6 +501,31 @@ button {
   border-color: var(--amber-deep);
   background: var(--amber-ghost);
   outline: none;
+}
+
+/* hatalı kart bildirimi: sakin, ama dokunma hedefi yeterli */
+.report-btn {
+  display: block;
+  margin: 0.6rem auto 0;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.85rem;
+  color: var(--on-paper-soft);
+  cursor: pointer;
+}
+
+.report-btn:hover,
+.report-btn:focus-visible {
+  background: rgba(0, 0, 0, 0.05);
+  outline: none;
+}
+
+.report-btn.is-reported {
+  color: var(--again-deep);
+  font-weight: 600;
 }
 
 /* tam ekran ders: mürekkep oda içindeki bir kitap sayfası */
@@ -907,12 +942,18 @@ button {
     font-size: 1.08rem;
   }
 
-  .lesson-btn {
-    font-size: 0.82rem;
-  }
-
   .lesson-body {
     padding: 1.5rem 1.35rem;
+  }
+
+  /* dar ekranda kod: biraz daha küçük, yatay kaydırma dokunmayla akıcı */
+  .lesson-body pre {
+    padding: 0.85rem 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lesson-body pre code {
+    font-size: 0.8rem;
   }
 
   .lesson-body h1 {
@@ -942,8 +983,9 @@ button {
 }
 
 @media (hover: none) {
-  .hint {
-    display: none;
+  .hint,
+  .lesson-hint {
+    display: none; /* klavye ipuçları dokunmatik cihazda anlamsız */
   }
 }
 
