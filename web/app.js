@@ -69,6 +69,7 @@ const screens = {
   signin: document.getElementById("signin-screen"),
   type: document.getElementById("type-screen"),
   topic: document.getElementById("topic-screen"),
+  skipped: document.getElementById("skipped-screen"),
   study: document.getElementById("study-screen"),
   empty: document.getElementById("empty-screen"),
 };
@@ -96,6 +97,11 @@ const frontText = document.getElementById("front-text");
 const backText = document.getElementById("back-text");
 const lessonOpen = document.getElementById("lesson-open");
 const reportBtn = document.getElementById("report-btn");
+const skipBtn = document.getElementById("skip-btn");
+const skippedOpen = document.getElementById("skipped-open");
+const skippedBack = document.getElementById("skipped-back");
+const skippedList = document.getElementById("skipped-list");
+const skippedSub = document.getElementById("skipped-sub");
 const lessonScreen = document.getElementById("lesson-screen");
 const lessonBody = document.getElementById("lesson-body");
 const lessonLabel = document.getElementById("lesson-label");
@@ -368,7 +374,7 @@ function showTypeScreen() {
   const any = CARD_TYPES.some((t) => (state.cardsByType[t] || []).length > 0);
   for (const btn of typeList.querySelectorAll("[data-type]")) {
     const cards = state.cardsByType[btn.dataset.type] || [];
-    const due = cards.filter(isDue).length;
+    const due = cards.filter((c) => !c.skipped && isDue(c)).length;
     const meta = btn.querySelector("[data-count]");
     meta.textContent = cards.length === 0 ? "kart yok" : `${due} kart hazır`;
     btn.classList.toggle("is-empty", cards.length === 0);
@@ -390,6 +396,7 @@ function showTopicScreen() {
   const cards = state.cardsByType[state.type] || [];
   topicTypeLabel.textContent = TYPE_LABELS[state.type];
   topicList.innerHTML = "";
+  skippedOpen.classList.add("hidden");
 
   if (cards.length === 0) {
     topicEmpty.classList.remove("hidden");
@@ -401,6 +408,7 @@ function showTopicScreen() {
   // konuya göre grupla, hazır sayısını hesapla
   const byTopic = new Map();
   for (const c of cards) {
+    if (c.skipped) continue; // "sorma" işaretli kartlar sayıya ve kuyruğa girmez
     const key = c.topic || "(konusuz)";
     if (!byTopic.has(key)) byTopic.set(key, { total: 0, due: 0 });
     const g = byTopic.get(key);
@@ -425,6 +433,10 @@ function showTopicScreen() {
     topicList.appendChild(btn);
   }
 
+  const nSkipped = cards.filter((c) => c.skipped).length;
+  skippedOpen.textContent = `Sorulmayacak sorular (${nSkipped})`;
+  skippedOpen.classList.toggle("hidden", nSkipped === 0);
+
   showScreen("topic");
 }
 
@@ -444,7 +456,7 @@ emptyBack.addEventListener("click", showTopicScreen);
 function startStudy() {
   const cards = state.cardsByType[state.type] || [];
   state.queue = cards
-    .filter((c) => (c.topic || "(konusuz)") === state.topic && isDue(c))
+    .filter((c) => !c.skipped && (c.topic || "(konusuz)") === state.topic && isDue(c))
     .sort((a, b) => millis(a.nextReview) - millis(b.nextReview));
   state.index = 0;
   state.session = { unique: new Set(), again: 0 };
@@ -636,6 +648,76 @@ reportBtn.addEventListener("click", () => {
   });
   toast(next ? "Hatalı olarak işaretlendi." : "İşaret kaldırıldı.");
 });
+
+// ---- "bu soruyu sorma" ------------------------------------------
+// Firestore'da kartın `skipped` (bool) ve `skippedAt` alanı. Kart silinmez; çalışma kuyruğundan ve
+// konu sayılarından çıkar. "Sorulmayacak sorular" ekranından geri alınır.
+
+function saveSkipped(card, value) {
+  if (DEMO) return Promise.resolve();
+  return updateDoc(
+    doc(db, "cards", card.id),
+    value ? { skipped: true, skippedAt: serverTimestamp() } : { skipped: false, skippedAt: deleteField() },
+  );
+}
+
+skipBtn.addEventListener("click", () => {
+  const card = state.queue[state.index];
+  if (!card) return;
+  card.skipped = true;
+  state.queue.splice(state.index, 1); // sıradaki kart aynı indekse kayar; notlama yapılmaz
+  saveSkipped(card, true).catch((err) => {
+    console.error("işaret kaydedilemedi:", err);
+    card.skipped = false;
+    toast("Kaydedilemedi; soru sonra tekrar gelecek.");
+  });
+  toast("Soru gizlendi. Konu ekranından geri alabilirsin.");
+  if (state.index >= state.queue.length) {
+    showEmpty("done");
+    return;
+  }
+  renderCard();
+});
+
+function showSkippedScreen() {
+  const cards = (state.cardsByType[state.type] || [])
+    .filter((c) => c.skipped)
+    .sort((a, b) => (a.topic || "").localeCompare(b.topic || "", "tr") || String(a.front).localeCompare(String(b.front), "tr"));
+  skippedSub.textContent = `${TYPE_LABELS[state.type]} · ${cards.length} soru`;
+  skippedList.innerHTML = "";
+  for (const c of cards) {
+    const row = document.createElement("div");
+    row.className = "skipped-item";
+    row.innerHTML =
+      '<div class="skipped-text"><p class="skipped-q"></p><p class="skipped-meta"></p></div>' +
+      '<button type="button" class="skipped-restore">Geri al</button>';
+    row.querySelector(".skipped-q").textContent = collapseWs(tidyFront(c.front));
+    row.querySelector(".skipped-meta").textContent = c.topic || "(konusuz)";
+    row.querySelector(".skipped-restore").dataset.id = c.id;
+    skippedList.appendChild(row);
+  }
+  showScreen("skipped");
+}
+
+skippedList.addEventListener("click", (e) => {
+  const btn = e.target.closest(".skipped-restore");
+  if (!btn) return;
+  const card = (state.cardsByType[state.type] || []).find((c) => c.id === btn.dataset.id);
+  if (!card) return;
+  card.skipped = false;
+  saveSkipped(card, false).catch((err) => {
+    console.error("işaret kaldırılamadı:", err);
+    card.skipped = true;
+    toast("Kaydedilemedi.");
+    showSkippedScreen();
+  });
+  toast("Soru geri alındı.");
+  if ((state.cardsByType[state.type] || []).some((c) => c.skipped)) showSkippedScreen();
+  else showTopicScreen();
+});
+
+skippedOpen.addEventListener("click", showSkippedScreen);
+skippedBack.addEventListener("click", showTopicScreen);
 
 // ---- notlama ----------------------------------------------
 

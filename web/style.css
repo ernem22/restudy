@@ -159,7 +159,8 @@ button {
 /* ---- seçim ekranları (tür / konu) ---- */
 
 #type-screen,
-#topic-screen {
+#topic-screen,
+#skipped-screen {
   align-items: center;
   justify-content: center;
   padding: 32px 20px;
@@ -503,10 +504,16 @@ button {
   outline: none;
 }
 
-/* hatalı kart bildirimi: sakin, ama dokunma hedefi yeterli */
-.report-btn {
-  display: block;
-  margin: 0.6rem auto 0;
+/* kart altındaki küçük işlemler: hatalı bildir / bu soruyu sorma */
+.card-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 6px;
+  margin-top: 0.4rem;
+}
+
+.tool-btn {
   min-height: 44px;
   padding: 8px 14px;
   border: 0;
@@ -517,15 +524,83 @@ button {
   cursor: pointer;
 }
 
-.report-btn:hover,
-.report-btn:focus-visible {
+.tool-btn:hover,
+.tool-btn:focus-visible {
   background: rgba(0, 0, 0, 0.05);
   outline: none;
 }
 
-.report-btn.is-reported {
+.tool-btn.is-reported {
   color: var(--again-deep);
   font-weight: 600;
+}
+
+/* konu ekranı: sorulmayacak sorulara giden bağlantı + liste ekranı */
+.skipped-link {
+  display: block;
+  margin: 1.25rem 0 0;
+  min-height: 44px;
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  font-size: 0.9rem;
+  color: var(--on-ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.skipped-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.skipped-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--ink-line);
+  border-radius: 12px;
+  background: var(--ink-raise);
+}
+
+.skipped-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.skipped-q {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+.skipped-meta {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--on-ink-soft);
+}
+
+.skipped-restore {
+  flex: none;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--amber);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--amber);
+  cursor: pointer;
+}
+
+.skipped-restore:active {
+  transform: scale(0.97);
 }
 
 /* tam ekran ders: mürekkep oda içindeki bir kitap sayfası */
